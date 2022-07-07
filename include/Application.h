@@ -1,12 +1,11 @@
+#pragma once
 #include <GLFW/glfw3.h>
 #include <OpenGL/gl3.h>
 #include <iostream>
-#pragma once
-//file: Application.h
 class Application
 {
 public:
-    Application() = default;
+    Application()=default;
     Application& operator = (const Application&) = delete;
 
 public:
@@ -27,5 +26,6 @@ private:
     static void window_resize(GLFWwindow* window,int width,int height);
 public:
     GLFWwindow* m_Window;
+    GLuint vbo;
     //add members here:
 };

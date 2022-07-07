@@ -5,12 +5,19 @@ find_package(PkgConfig REQUIRED)
 pkg_search_module(GLFW glfw3)
 find_package(OpenGL)
 
+
+
 if(${GLFW_FOUND})
 add_executable(
 	TutorialApp
-	src/main.cpp
 	src/Application.cpp
+	src/main.cpp
+	src/VertexBuffer.cpp
+	src/Vector.cpp
 	include/Application.h
+	include/Math3D.h
+	include/VertexBuffer.h
+	include/Vector.h
 )
 
 

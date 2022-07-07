@@ -1,5 +1,7 @@
 #include <iostream>
 #include <Application.h>
+#include <Math3D.h>
+#include <VertexBuffer.h>
 
 bool Application::initialize(const char* window_name, int width, int height)
 {
@@ -29,8 +31,15 @@ bool Application::initialize(const char* window_name, int width, int height)
     glfwSetWindowUserPointer(m_Window, this);
     glfwSetWindowSizeCallback(m_Window, window_resize);
     
-    
-    run();
+
+    Vector3f Vertices[3];
+    Vertices[0] = Vector3f(-1.0f, -1.0f, 0.0f);
+    Vertices[1] = Vector3f(1.0f, -1.0f, 0.0f);
+    Vertices[2] = Vector3f(0.0f, 1.0f, 0.0f);
+    glGenBuffers(1, &vbo);                                                     //generate buffer object names
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);                                        //binds the vbo to the buffer array
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW); //
+
     return true;
 }
 
@@ -59,7 +68,15 @@ void Application::update(const float delta_seconds)
 
 void Application::render() {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDisableVertexAttribArray(0);
+
     glClear(GL_COLOR_BUFFER_BIT);
+    
 }
 
 void Application::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
