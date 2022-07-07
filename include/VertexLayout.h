@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <VertexAttribute.h>
 
 
 
@@ -10,6 +11,7 @@ public:
 
 	void AddVertexAttribute(const char *name, const std::size_t number_of_floats);
 	std::vector<VertexAttribute> get_attributes() const;
+	
 private:
 	std::vector<VertexAttribute> m_Attributes;
 };

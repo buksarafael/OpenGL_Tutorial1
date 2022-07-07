@@ -1,10 +1,9 @@
-#include <iostream>
 #include <Application.h>
-#include <Math3D.h>
-#include <VertexBuffer.h>
 
 bool Application::initialize(const char* window_name, int width, int height)
 {
+
+    //initializing window and context
     if (!glfwInit()){
         std::cout<<"Failed to initialize GLFW";
         return false;
@@ -26,19 +25,34 @@ bool Application::initialize(const char* window_name, int width, int height)
         std::cout<<"Created window!"<<std::endl;
     }
     
+
     glfwMakeContextCurrent(m_Window);
     glfwSetKeyCallback(m_Window, Application::key_callback);
     glfwSetWindowUserPointer(m_Window, this);
     glfwSetWindowSizeCallback(m_Window, window_resize);
     
+    //vertices stuff
 
-    Vector3f Vertices[3];
-    Vertices[0] = Vector3f(-1.0f, -1.0f, 0.0f);
-    Vertices[1] = Vector3f(1.0f, -1.0f, 0.0f);
-    Vertices[2] = Vector3f(0.0f, 1.0f, 0.0f);
-    glGenBuffers(1, &vbo);                                                     //generate buffer object names
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);                                        //binds the vbo to the buffer array
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW); //
+    VertexLayout* vlayout = new VertexLayout;
+    VertexBuffer* vbuffer = new VertexBuffer;
+
+    vlayout->AddVertexAttribute("pos",2);
+
+    float data[] = { 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f };
+
+    vbuffer->create(data,*vlayout,sizeof(data)/vlayout->size());
+    vbuffer->bind();
+    this.configure_shaders();
+    m_Shaders.use_shaders();
+
+
+    //Vector3f Vertices[3];
+    //Vertices[0] = Vector3f(-1.0f, -1.0f, 0.0f);
+    //Vertices[1] = Vector3f(1.0f, -1.0f, 0.0f);
+    //Vertices[2] = Vector3f(0.0f, 1.0f, 0.0f);
+    //glGenBuffers(1, &vbo);                                                     //generate buffer object names
+    //glBindBuffer(GL_ARRAY_BUFFER, vbo);                                        //binds the vbo to the buffer array
+    //glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW); //
 
     return true;
 }
@@ -52,7 +66,7 @@ void Application::run()
         float now_time = glfwGetTime();
 
         this->update(now_time - delta_time);
-        glfwMakeContextCurrent(m_Window);
+        //glfwMakeContextCurrent(m_Window);
         this->render();
         delta_time = now_time;
 
@@ -67,15 +81,9 @@ void Application::update(const float delta_seconds)
 }
 
 void Application::render() {
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-    glDisableVertexAttribArray(0);
-
     glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
     
 }
 

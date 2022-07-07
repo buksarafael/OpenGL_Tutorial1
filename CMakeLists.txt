@@ -13,11 +13,12 @@ add_executable(
 	src/Application.cpp
 	src/main.cpp
 	src/VertexBuffer.cpp
-	src/Vector.cpp
+	src/VertexLayout.cpp
 	include/Application.h
 	include/Math3D.h
+	include/VertexAttribute.h
 	include/VertexBuffer.h
-	include/Vector.h
+	include/VertexLayout.h
 )
 
 
