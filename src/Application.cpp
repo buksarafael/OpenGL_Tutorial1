@@ -25,38 +25,28 @@ bool Application::initialize(const char* window_name, int width, int height)
         std::cout<<"Created window!"<<std::endl;
     }
     
-
     glfwMakeContextCurrent(m_Window);
     glfwSetKeyCallback(m_Window, Application::key_callback);
     glfwSetWindowUserPointer(m_Window, this);
     glfwSetWindowSizeCallback(m_Window, window_resize);
-    
-    //vertices stuff
 
-    VertexLayout* vlayout = new VertexLayout;
-    VertexBuffer* vbuffer = new VertexBuffer;
-
-    vlayout->AddVertexAttribute("pos",2);
-
-    float data[] = { 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f };
-
-    vbuffer->create(data,*vlayout,sizeof(data)/vlayout->size());
-    vbuffer->bind();
-    this.configure_shaders();
-    m_Shaders.use_shaders();
-
-
-    //Vector3f Vertices[3];
-    //Vertices[0] = Vector3f(-1.0f, -1.0f, 0.0f);
-    //Vertices[1] = Vector3f(1.0f, -1.0f, 0.0f);
-    //Vertices[2] = Vector3f(0.0f, 1.0f, 0.0f);
-    //glGenBuffers(1, &vbo);                                                     //generate buffer object names
-    //glBindBuffer(GL_ARRAY_BUFFER, vbo);                                        //binds the vbo to the buffer array
-    //glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW); //
+    this->initVertex();
 
     return true;
 }
+void Application::initVertex(){
+    v_Lay = std::make_shared<VertexLayout>();
+    v_Buff = std::make_shared<VertexBuffer>();
 
+    v_Lay->AddVertexAttribute("Position", 2);
+    v_Lay->AddVertexAttribute("Colour", 3);
+
+    float data[] = {-1.0f, -1.0f, 1.0f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f,
+                  0.0f,  0.0f,  1.0f, -1.0f, 1.0f, 0.0f, 0.0f};
+
+    v_Buff->create(data, *v_Lay, sizeof(data) / v_Lay->size());
+    v_Buff->bind();
+}
 void Application::run()
 {
     float delta_time = glfwGetTime();
@@ -64,7 +54,6 @@ void Application::run()
     while (!glfwWindowShouldClose(m_Window))
     {
         float now_time = glfwGetTime();
-
         this->update(now_time - delta_time);
         //glfwMakeContextCurrent(m_Window);
         this->render();

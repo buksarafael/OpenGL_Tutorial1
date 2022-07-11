@@ -16,7 +16,8 @@ add_executable(
 	src/VertexLayout.cpp
 	include/Application.h
 	include/Math3D.h
-	include/VertexAttribute.h
+	include/ogldev_types.h
+	include/ogldev_util.h
 	include/VertexBuffer.h
 	include/VertexLayout.h
 )

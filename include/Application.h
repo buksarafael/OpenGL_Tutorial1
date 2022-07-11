@@ -16,12 +16,13 @@ public: //methods
     void update(const float delta_seconds);
     void render();
     void run();
+    void initVertex();
 
 private://methods
     static void key_callback(GLFWwindow*, int, int, int, int);
     static void window_resize(GLFWwindow* window,int width,int height);
 public: //members
-    GLFWwindow* m_Window;
-    GLuint vbo;
-    //add members here:
+    GLFWwindow* m_Window = nullptr;
+    std::shared_ptr<VertexBuffer> v_Buff;
+    std::shared_ptr<VertexLayout> v_Lay;
 };
