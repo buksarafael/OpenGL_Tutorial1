@@ -1,9 +1,0 @@
-{
-    "cmake.configureOnOpen": false,
-    "files.associations": {
-        "vector": "cpp",
-        "__split_buffer": "cpp",
-        "string": "cpp",
-        "iostream": "cpp"
-    }
-}
