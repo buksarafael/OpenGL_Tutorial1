@@ -1,7 +1,6 @@
 #include <Application.h>
 
-bool Application::initialize(const char* window_name, int width, int height)
-{
+bool Application::initialize(const char* window_name, int width, int height){
 
     //initializing window and context
     if (!glfwInit()){
@@ -29,11 +28,18 @@ bool Application::initialize(const char* window_name, int width, int height)
     glfwSetKeyCallback(m_Window, Application::key_callback);
     glfwSetWindowUserPointer(m_Window, this);
     glfwSetWindowSizeCallback(m_Window, window_resize);
-
-    this->initVertex();
-
     return true;
 }
+
+void Application::initShaders(){
+    const char* pVSFileName = "/Users/rafaelb/Desktop/Tutorial1/src/shader.vs";
+    const char* pFSFileName = "/Users/rafaelb/Desktop/Tutorial1/src/shader.fs";
+
+    ShadersProgram shader;
+    std::array <const char*,2> files={pVSFileName,pFSFileName};
+    shader.create(files);
+}
+
 void Application::initVertex(){
     v_Lay = std::make_shared<VertexLayout>();
     v_Buff = std::make_shared<VertexBuffer>();
@@ -47,15 +53,14 @@ void Application::initVertex(){
     v_Buff->create(data, *v_Lay, sizeof(data) / v_Lay->size());
     v_Buff->bind();
 }
-void Application::run()
-{
+
+void Application::run(){
     float delta_time = glfwGetTime();
 
     while (!glfwWindowShouldClose(m_Window))
     {
         float now_time = glfwGetTime();
         this->update(now_time - delta_time);
-        //glfwMakeContextCurrent(m_Window);
         this->render();
         delta_time = now_time;
 
@@ -66,14 +71,19 @@ void Application::run()
 
 void Application::update(const float delta_seconds)
 {
-    std::cout << delta_seconds << std::endl;
+    //std::cout << delta_seconds << std::endl;
 }
 
-void Application::render() {
+void Application::render() {//init on first frame
     glClear(GL_COLOR_BUFFER_BIT);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-    
+    if(m_Initialised==false){
+        this->initVertex();
+        this->initShaders();
+        v_Buff->bind();
+        m_Initialised=true;
+    }
+    glDrawArrays(GL_TRIANGLES,0,3);
 }
 
 void Application::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)

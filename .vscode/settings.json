@@ -4,6 +4,8 @@
         "vector": "cpp",
         "__split_buffer": "cpp",
         "string": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "filesystem": "cpp",
+        "iosfwd": "cpp"
     }
 }

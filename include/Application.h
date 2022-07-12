@@ -4,7 +4,9 @@
 #include <Math3D.h>
 #include <VertexBuffer.h>
 #include <VertexLayout.h>
+#include <ShadersProgram.h>
 #include <iostream>
+#include <array>
 class Application
 {
 public: //constructor
@@ -17,6 +19,7 @@ public: //methods
     void render();
     void run();
     void initVertex();
+    void initShaders();
 
 private://methods
     static void key_callback(GLFWwindow*, int, int, int, int);
@@ -25,4 +28,5 @@ public: //members
     GLFWwindow* m_Window = nullptr;
     std::shared_ptr<VertexBuffer> v_Buff;
     std::shared_ptr<VertexLayout> v_Lay;
+    bool m_Initialised=false;
 };

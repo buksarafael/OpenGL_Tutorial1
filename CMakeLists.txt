@@ -12,12 +12,16 @@ add_executable(
 	TutorialApp
 	src/Application.cpp
 	src/main.cpp
+	src/shader.fs
+	src/shader.vs
+	src/ShadersProgram.cpp
 	src/VertexBuffer.cpp
 	src/VertexLayout.cpp
 	include/Application.h
 	include/Math3D.h
 	include/ogldev_types.h
 	include/ogldev_util.h
+	include/ShadersProgram.h
 	include/VertexBuffer.h
 	include/VertexLayout.h
 )
