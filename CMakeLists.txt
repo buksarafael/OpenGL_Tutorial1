@@ -11,6 +11,7 @@ if(${GLFW_FOUND})
 add_executable(
 	TutorialApp
 	src/Application.cpp
+	src/AttributeHelper.cpp
 	src/main.cpp
 	src/shader.fs
 	src/shader.vs
@@ -18,10 +19,12 @@ add_executable(
 	src/VertexBuffer.cpp
 	src/VertexLayout.cpp
 	include/Application.h
+	include/AttributeHelper.h
 	include/Math3D.h
 	include/ogldev_types.h
 	include/ogldev_util.h
 	include/ShadersProgram.h
+	include/VertexAttribute.h
 	include/VertexBuffer.h
 	include/VertexLayout.h
 )

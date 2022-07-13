@@ -1,25 +1,8 @@
 #pragma once
 #include <iostream>
+#include <AttributeHelper.h>
+#include <VertexAttribute.h>
 #include <vector>
-
-struct AttributeHelper{
-	enum AttributeType
-    {
-        kPosition = 0,
-        kColor,
-        kAttributeCount
-    };
-    static const char* getAttributeName(const AttributeType t);
-    static AttributeType getAttributeType(const char * attribute_name);
-};
-
-struct VertexAttribute {
-
-  const char *type = nullptr;
-
-  std::size_t number_of_floats=0;
-
-};
 
 class VertexLayout //this class describes the attributes you have in the data:
 {
