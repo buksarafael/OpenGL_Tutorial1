@@ -44,11 +44,12 @@ void Application::initVertex(){
     v_Lay = std::make_shared<VertexLayout>();
     v_Buff = std::make_shared<VertexBuffer>();
 
-    v_Lay->AddVertexAttribute("Position", 2);
-    v_Lay->AddVertexAttribute("Colour", 3);
-
-    float data[] = {-1.0f, -1.0f, 1.0f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f,
-                  0.0f,  0.0f,  1.0f, -1.0f, 1.0f, 0.0f, 0.0f};
+    v_Lay->AddVertexAttribute(AttributeHelper::kPosition, 2);
+    v_Lay->AddVertexAttribute(AttributeHelper::kColor, 3);
+    //                x      y     R    G     B
+    float data[] = {-1.0f, -1.0f, 1.0f, 0.0f, 0.0f,
+                     0.0f,  1.0f, 0.0f, 1.0f, 0.0f,
+                     1.0f, -1.0f, 0.0f, 0.0f, 1.0f};
 
     v_Buff->create(data, *v_Lay, sizeof(data) / v_Lay->size());
     v_Buff->bind();
@@ -80,9 +81,9 @@ void Application::render() {//init on first frame
     if(m_Initialised==false){
         this->initVertex();
         this->initShaders();
-        v_Buff->bind();
         m_Initialised=true;
     }
+    v_Buff->bind();
     glDrawArrays(GL_TRIANGLES,0,3);
 }
 

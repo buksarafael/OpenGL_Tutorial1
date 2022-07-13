@@ -1,4 +1,3 @@
-//vertex layout.
 #pragma once
 #include <OpenGL/gl3.h>
 #include <vector>
@@ -12,7 +11,6 @@ class VertexBuffer
 public:
 	VertexBuffer();
 	~VertexBuffer();
-
 public:
 	void bind();
 	
