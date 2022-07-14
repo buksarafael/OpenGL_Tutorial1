@@ -72,6 +72,14 @@ bool ShadersProgram::create(const std::array<const char *, 2> &files){
         fprintf(stderr,"Error linking shader program: '%s'\n",ErrorLog);
         exit(1);
     }
+    
+    GLint gScaleLocation;
+    gScaleLocation = glGetUniformLocation(ShaderProgram,"gScale");
+    if(gScaleLocation==-1){
+        std::cout<<"Error getting uniform location of 'gScale'\n";
+    }
+
+
     glValidateProgram(ShaderProgram);
     glGetProgramiv(ShaderProgram,GL_VALIDATE_STATUS,&Success);
     if(!Success){

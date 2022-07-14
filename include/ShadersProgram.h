@@ -13,7 +13,7 @@ public:
 	bool create(const std::array<const char *, 2> &files);
 
 	std::size_t getAttributeCount() const;
-
+	
 	const char* getAttributeName(const std::size_t attribute_index) const;
 
 	std::size_t getUniformCount() const;

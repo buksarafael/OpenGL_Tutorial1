@@ -12,6 +12,8 @@ const char *AttributeHelper::getAttributeName(const AttributeType t){
         case AttributeHelper::AttributeType::kAttributeCount:
             return "AttributeCount";
             break;
+        default:
+            return "Error";
     }
 }
 AttributeHelper::AttributeType

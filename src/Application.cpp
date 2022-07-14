@@ -1,5 +1,5 @@
 #include <Application.h>
-
+Vector2f uOffset(0.0f,0.0f);
 bool Application::initialize(const char* window_name, int width, int height){
 
     //initializing window and context
@@ -46,7 +46,7 @@ void Application::initVertex(){
 
     v_Lay->AddVertexAttribute(AttributeHelper::kPosition, 2);
     v_Lay->AddVertexAttribute(AttributeHelper::kColor, 3);
-    //                x      y     R    G     B
+    //                x      y     R     G     B
     float data[] = {-1.0f, -1.0f, 1.0f, 0.0f, 0.0f,
                      0.0f,  1.0f, 0.0f, 1.0f, 0.0f,
                      1.0f, -1.0f, 0.0f, 0.0f, 1.0f};
@@ -83,7 +83,16 @@ void Application::render() {//init on first frame
         this->initShaders();
         m_Initialised=true;
     }
+
+    static float Scale = 0.0f;
+    static float Delta = 0.001f;
+    Scale+=Delta;
+    if((Scale>=1.0f)||(Scale<=-1.0f)){
+        Delta *=-1.0f;
+    }
+
     v_Buff->bind();
+
     glDrawArrays(GL_TRIANGLES,0,3);
 }
 
@@ -92,6 +101,18 @@ void Application::key_callback(GLFWwindow* window, int key, int scancode, int ac
     Application* handler = reinterpret_cast<Application*>(glfwGetWindowUserPointer(window));
     if (key == GLFW_KEY_ESCAPE)
         glfwSetWindowShouldClose(handler->m_Window, GLFW_TRUE);
+    if(key==GLFW_KEY_UP){
+        uOffset.y+=0.05f;
+    }
+    if(key==GLFW_KEY_DOWN){
+        uOffset.y-=0.05f;
+    }
+    if(key==GLFW_KEY_LEFT){
+        uOffset.x-=0.05f;
+    }
+    if(key==GLFW_KEY_RIGHT){
+        uOffset.x+=0.05f;
+    }
 }
 
 void Application::window_resize(GLFWwindow *window, int width, int height){
