@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(TutorialApp)
+set(CMAKE_CXX_STANDARD 17)
+
 
 find_package(PkgConfig REQUIRED)
 pkg_search_module(GLFW glfw3)
@@ -16,6 +18,7 @@ add_executable(
 	src/shader.fs
 	src/shader.vs
 	src/ShadersProgram.cpp
+	src/UniformHelper.cpp
 	src/VertexBuffer.cpp
 	src/VertexLayout.cpp
 	include/Application.h
@@ -24,6 +27,7 @@ add_executable(
 	include/ogldev_types.h
 	include/ogldev_util.h
 	include/ShadersProgram.h
+	include/UniformHelper.h
 	include/VertexAttribute.h
 	include/VertexBuffer.h
 	include/VertexLayout.h

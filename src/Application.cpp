@@ -1,5 +1,7 @@
 #include <Application.h>
 Vector2f uOffset(0.0f,0.0f);
+GLint uOffsetLocation;
+
 bool Application::initialize(const char* window_name, int width, int height){
 
     //initializing window and context
@@ -31,13 +33,15 @@ bool Application::initialize(const char* window_name, int width, int height){
     return true;
 }
 
+void Application::initAll(){
+    this->initVertex();
+    this->initShaders();
+}
 void Application::initShaders(){
     const char* pVSFileName = "/Users/rafaelb/Desktop/Tutorial1/src/shader.vs";
     const char* pFSFileName = "/Users/rafaelb/Desktop/Tutorial1/src/shader.fs";
-
-    ShadersProgram shader;
     std::array <const char*,2> files={pVSFileName,pFSFileName};
-    shader.create(files);
+    m_Shader.create(files);
 }
 
 void Application::initVertex(){
@@ -79,18 +83,13 @@ void Application::render() {//init on first frame
     glClear(GL_COLOR_BUFFER_BIT);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     if(m_Initialised==false){
-        this->initVertex();
-        this->initShaders();
+        this->initAll();
         m_Initialised=true;
     }
-
-    static float Scale = 0.0f;
-    static float Delta = 0.001f;
-    Scale+=Delta;
-    if((Scale>=1.0f)||(Scale<=-1.0f)){
-        Delta *=-1.0f;
-    }
-
+    //m_Shader.setUniform(uOffset);
+    //bind shaders
+    glUniform2f(uOffsetLocation,uOffset.x,uOffset.y);
+    m_Shader.bindShaders();
     v_Buff->bind();
 
     glDrawArrays(GL_TRIANGLES,0,3);

@@ -1,5 +1,5 @@
 #include <ShadersProgram.h>
-bool ShadersProgram::readFile(const char* pFileName, std::string& outFile){
+bool readFile(const char* pFileName, std::string& outFile){
     std::ifstream f(pFileName);
     bool ret=false;
     if(f.is_open()){
@@ -16,6 +16,7 @@ bool ShadersProgram::readFile(const char* pFileName, std::string& outFile){
     }
     return ret;
 }
+//localize
 void ShadersProgram::addShader(GLuint ShaderProgram,const char* pShaderText,GLenum ShaderType){
     GLuint ShaderObj = glCreateShader(ShaderType);
     if(ShaderObj==0){
@@ -39,11 +40,22 @@ void ShadersProgram::addShader(GLuint ShaderProgram,const char* pShaderText,GLen
     }
     glAttachShader(ShaderProgram,ShaderObj);
 }
+GLint ShadersProgram::getUniformPosition(Uniform uniform){
+    const char* name=UniformHelper::getName(uniform);
+    return glGetUniformLocation(m_ShaderProgram,name);
+}
+
+void ShadersProgram::setUniform(Uniform uniform,int value){
+    glUniform1i(m_Uniforms[(std::size_t)uniform],value);
+}
+void ShadersProgram::setUniform(Uniform uniform,float value){
+    glUniform1f(m_Uniforms[(std::size_t)uniform],value);
+}
 
 bool ShadersProgram::create(const std::array<const char *, 2> &files){
-    GLuint ShaderProgram=glCreateProgram();
-
-    if(ShaderProgram==0){
+    this->m_ShaderProgram=glCreateProgram();
+ 
+    if(this->m_ShaderProgram==0){
         fprintf(stderr,"Error creating shader program\n");
         exit(1);
     }
@@ -54,39 +66,42 @@ bool ShadersProgram::create(const std::array<const char *, 2> &files){
         std::cout<<"Can't read vertex shader file\n";
         exit(1);
     }
-    addShader(ShaderProgram,vs.c_str(),GL_VERTEX_SHADER);
+    addShader(m_ShaderProgram,vs.c_str(),GL_VERTEX_SHADER);
 
     if(!readFile(files[1],fs)){
         std::cout<<"Can't read fragment shader file\n";
         exit(1);
     }
-    addShader(ShaderProgram,fs.c_str(),GL_FRAGMENT_SHADER);
+    addShader(m_ShaderProgram,fs.c_str(),GL_FRAGMENT_SHADER);
 
     GLint Success=0;
     GLchar ErrorLog[1024]={0};
 
-    glLinkProgram(ShaderProgram);
-    glGetProgramiv(ShaderProgram,GL_LINK_STATUS,&Success);
+    glLinkProgram(m_ShaderProgram);
+    glGetProgramiv(m_ShaderProgram,GL_LINK_STATUS,&Success);
     if(Success==0){
-        glGetProgramInfoLog(ShaderProgram,sizeof(ErrorLog),NULL,ErrorLog);
+        glGetProgramInfoLog(m_ShaderProgram,sizeof(ErrorLog),NULL,ErrorLog);
         fprintf(stderr,"Error linking shader program: '%s'\n",ErrorLog);
         exit(1);
     }
     
     GLint gScaleLocation;
-    gScaleLocation = glGetUniformLocation(ShaderProgram,"gScale");
+    gScaleLocation = glGetUniformLocation(m_ShaderProgram,"uOffset");
     if(gScaleLocation==-1){
         std::cout<<"Error getting uniform location of 'gScale'\n";
     }
 
-
-    glValidateProgram(ShaderProgram);
-    glGetProgramiv(ShaderProgram,GL_VALIDATE_STATUS,&Success);
-    if(!Success){
-        glGetProgramInfoLog(ShaderProgram,sizeof(ErrorLog),NULL,ErrorLog);
-        fprintf(stderr,"Invalid shader program: '%s'\n");
-        exit(1);
-    }
-    glUseProgram(ShaderProgram);
+    bindShaders();
+    //bindShaders(m_ShaderProgram);
+}
+void ShadersProgram::bindShaders(){
+    glValidateProgram(this->m_ShaderProgram);
+    glUseProgram(this->m_ShaderProgram);
+    //glGetProgramiv(m_ShaderProgram,GL_VALIDATE_STATUS,	&Success);
+    //if(!Success){
+        //glGetProgramInfoLog(m_ShaderProgram,sizeof(ErrorLog),NULL,ErrorLog);
+        //fprintf(stderr,"Invalid shader program: '%s'\n");
+        //exit(1);
+    //}
 
 }

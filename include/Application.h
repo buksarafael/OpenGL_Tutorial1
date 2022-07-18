@@ -20,12 +20,14 @@ public: //methods
     void run();
     void initVertex();
     void initShaders();
+    void initAll();
 
 private://methods
     static void key_callback(GLFWwindow*, int, int, int, int);
     static void window_resize(GLFWwindow* window,int width,int height);
 public: //members
     GLFWwindow* m_Window = nullptr;
+    ShadersProgram m_Shader;
     std::shared_ptr<VertexBuffer> v_Buff;
     std::shared_ptr<VertexLayout> v_Lay;
     bool m_Initialised=false;
