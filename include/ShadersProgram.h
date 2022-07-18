@@ -28,6 +28,6 @@ public:
 
 
 private:
-	static void addShader(GLuint ShaderProgram,const char* pShaderText,GLenum ShaderType);
+	//static void addShader(GLuint ShaderProgram,const char* pShaderText,GLenum ShaderType);
 	void initUniforms();
 };

@@ -17,7 +17,7 @@ bool readFile(const char* pFileName, std::string& outFile){
     return ret;
 }
 //localize
-void ShadersProgram::addShader(GLuint ShaderProgram,const char* pShaderText,GLenum ShaderType){
+void addShader(GLuint ShaderProgram,const char* pShaderText,GLenum ShaderType){
     GLuint ShaderObj = glCreateShader(ShaderType);
     if(ShaderObj==0){
         fprintf(stderr, "Error creating shader type %d\n",ShaderType);
@@ -55,7 +55,7 @@ void ShadersProgram::setUniform(Uniform uniform,float value){
 bool ShadersProgram::create(const std::array<const char *, 2> &files){
     this->m_ShaderProgram=glCreateProgram();
  
-    if(this->m_ShaderProgram==0){
+    if(m_ShaderProgram==0){
         fprintf(stderr,"Error creating shader program\n");
         exit(1);
     }
