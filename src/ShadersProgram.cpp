@@ -16,7 +16,6 @@ bool readFile(const char* pFileName, std::string& outFile){
     }
     return ret;
 }
-//localize
 void addShader(GLuint ShaderProgram,const char* pShaderText,GLenum ShaderType){
     GLuint ShaderObj = glCreateShader(ShaderType);
     if(ShaderObj==0){
@@ -40,16 +39,33 @@ void addShader(GLuint ShaderProgram,const char* pShaderText,GLenum ShaderType){
     }
     glAttachShader(ShaderProgram,ShaderObj);
 }
+
+void ShadersProgram::initUniforms(){
+    auto count=(std::size_t)Uniform::Count;
+    for(std::size_t i =0;i<count;i++){
+        const char* name=UniformHelper::getName((Uniform)i);
+        int pos=glGetUniformLocation(m_ShaderProgram,name);
+        if(pos==-1){
+            m_Uniforms[i]=-1;
+            continue;
+        }
+        m_Uniforms[i]=(GLuint)pos;
+    }
+}
+
 GLint ShadersProgram::getUniformPosition(Uniform uniform){
     const char* name=UniformHelper::getName(uniform);
     return glGetUniformLocation(m_ShaderProgram,name);
 }
 
 void ShadersProgram::setUniform(Uniform uniform,int value){
-    glUniform1i(m_Uniforms[(std::size_t)uniform],value);
+    glUniform1i((std::size_t)uniform,value);
 }
 void ShadersProgram::setUniform(Uniform uniform,float value){
-    glUniform1f(m_Uniforms[(std::size_t)uniform],value);
+    glUniform1f((std::size_t)uniform,value);
+}
+void ShadersProgram::setUniform(Uniform uniform,Vector2f& vec2f){
+    glUniform2f((std::size_t)uniform,vec2f.x,vec2f.y); 
 }
 
 bool ShadersProgram::create(const std::array<const char *, 2> &files){
@@ -90,18 +106,10 @@ bool ShadersProgram::create(const std::array<const char *, 2> &files){
     if(gScaleLocation==-1){
         std::cout<<"Error getting uniform location of 'gScale'\n";
     }
-
+    initUniforms();
     bindShaders();
-    //bindShaders(m_ShaderProgram);
 }
 void ShadersProgram::bindShaders(){
     glValidateProgram(this->m_ShaderProgram);
     glUseProgram(this->m_ShaderProgram);
-    //glGetProgramiv(m_ShaderProgram,GL_VALIDATE_STATUS,	&Success);
-    //if(!Success){
-        //glGetProgramInfoLog(m_ShaderProgram,sizeof(ErrorLog),NULL,ErrorLog);
-        //fprintf(stderr,"Invalid shader program: '%s'\n");
-        //exit(1);
-    //}
-
 }

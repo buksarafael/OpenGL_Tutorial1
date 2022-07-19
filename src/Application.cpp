@@ -87,8 +87,8 @@ void Application::render() {//init on first frame
         m_Initialised=true;
     }
     //m_Shader.setUniform(uOffset);
-    //bind shaders
-    glUniform2f(uOffsetLocation,uOffset.x,uOffset.y);
+    m_Shader.setUniform(Uniform::Offset,uOffset);
+    //glUniform2f(uOffsetLocation,uOffset.x,uOffset.y);
     m_Shader.bindShaders();
     v_Buff->bind();
 

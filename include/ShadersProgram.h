@@ -20,14 +20,10 @@ private:
 
 public:
 	bool create(const std::array<const char *, 2> &files);
-	GLint getUniformPosition(Uniform);
-	void setUniform(Uniform,int);
-	void setUniform(Uniform,float);
-	void setUniform(Uniform,Vector2f&);
+	GLint getUniformPosition(Uniform uniform);
+	void setUniform(Uniform,int value);
+	void setUniform(Uniform,float value);
+	void setUniform(Uniform,Vector2f& vec2f);
 	void bindShaders();
-
-
-private:
-	//static void addShader(GLuint ShaderProgram,const char* pShaderText,GLenum ShaderType);
 	void initUniforms();
 };

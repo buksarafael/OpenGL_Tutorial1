@@ -5,7 +5,6 @@ struct UniformData{
 };
 
 UniformData::UniformData(){
-    auto bla = std::pair<const char*,Uniform>{"Model",Uniform::Model};
     uniforms = std::array<std::pair<const char*,Uniform>, (std::size_t)Uniform::Count>
     {
         std::pair<const char*,Uniform>{"Offset",Uniform::Offset},
