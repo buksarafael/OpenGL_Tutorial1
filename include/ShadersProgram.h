@@ -24,6 +24,9 @@ public:
 	void setUniform(Uniform,int value);
 	void setUniform(Uniform,float value);
 	void setUniform(Uniform,Vector2f& vec2f);
+	void setUniform(Uniform,Vector3f& vec3f);
+	void setUniform(Uniform,Vector4f& vec4f);
+	void setUniform(Uniform,Matrix4f& mat4f);
 	void bindShaders();
 	void initUniforms();
 };

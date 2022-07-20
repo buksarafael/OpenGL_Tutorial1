@@ -78,7 +78,7 @@ void Application::update(const float delta_seconds)
 {
     //std::cout << delta_seconds << std::endl;
 }
-
+float scale=0;
 void Application::render() {//init on first frame
     glClear(GL_COLOR_BUFFER_BIT);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -86,9 +86,15 @@ void Application::render() {//init on first frame
         this->initAll();
         m_Initialised=true;
     }
-    //m_Shader.setUniform(uOffset);
-    m_Shader.setUniform(Uniform::Offset,uOffset);
-    //glUniform2f(uOffsetLocation,uOffset.x,uOffset.y);
+    scale+=0.005f;
+    Matrix4f Translation(1.0f,0.0f,0.0f,scale,
+                         0.0f,1.0f,0.0f,0.0f,
+                         0.0f,0.0f,1.0f,0.0f,
+                         0.0f,0.0f,0.0f,1.0f);
+
+
+
+    m_Shader.setUniform(Uniform::Offset,Translation);
     m_Shader.bindShaders();
     v_Buff->bind();
 
