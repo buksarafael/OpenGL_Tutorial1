@@ -26,6 +26,7 @@
 #include <string>
 #include <time.h>
 #include <vector>
+#include <OpenGL/gl3.h>
 
 using namespace std;
 

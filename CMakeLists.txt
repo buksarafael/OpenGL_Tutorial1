@@ -15,6 +15,7 @@ add_executable(
 	src/Application.cpp
 	src/AttributeHelper.cpp
 	src/main.cpp
+	src/Pipeline.cpp
 	src/shader.fs
 	src/shader.vs
 	src/ShadersProgram.cpp
@@ -26,6 +27,7 @@ add_executable(
 	include/Math3D.h
 	include/ogldev_types.h
 	include/ogldev_util.h
+	include/Pipeline.h
 	include/ShadersProgram.h
 	include/UniformHelper.h
 	include/VertexAttribute.h

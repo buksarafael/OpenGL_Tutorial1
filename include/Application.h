@@ -7,6 +7,7 @@
 #include <ShadersProgram.h>
 #include <iostream>
 #include <array>
+#include <Pipeline.h>
 class Application
 {
 public: //constructor

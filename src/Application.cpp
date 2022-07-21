@@ -1,5 +1,5 @@
 #include <Application.h>
-Vector2f uOffset(0.0f,0.0f);
+Vector3f uOffset(0.0f,0.0f,0.0f);
 GLint uOffsetLocation;
 
 bool Application::initialize(const char* window_name, int width, int height){
@@ -78,7 +78,12 @@ void Application::update(const float delta_seconds)
 {
     //std::cout << delta_seconds << std::endl;
 }
-float scale=0;
+float scalex=0;
+float scaley=0;
+float translateDelta=0.005f;
+float rotateDelta=0.01f;
+float AngleInRadians = 0.0f;
+
 void Application::render() {//init on first frame
     glClear(GL_COLOR_BUFFER_BIT);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -86,15 +91,55 @@ void Application::render() {//init on first frame
         this->initAll();
         m_Initialised=true;
     }
-    scale+=0.005f;
-    Matrix4f Translation(1.0f,0.0f,0.0f,scale,
-                         0.0f,1.0f,0.0f,0.0f,
+    //matrix test
+
+    static float AngleInRadians = 0.0f;
+
+    scalex+=translateDelta;
+    scaley+=translateDelta;
+    if(scalex>=0.1f||scalex<=0){
+        translateDelta*=-1;
+    }
+    Matrix4f Translation(1.0f,0.0f,0.0f,uOffset.x,
+                         0.0f,1.0f,0.0f,uOffset.y,
                          0.0f,0.0f,1.0f,0.0f,
                          0.0f,0.0f,0.0f,1.0f);
 
 
+    AngleInRadians += rotateDelta;
+    if ((AngleInRadians >= 1.5708f) || (AngleInRadians <= -1.5708f)) {
+        rotateDelta *= -1.0f;
+    }
+    Matrix4f RotationZ(cosf(AngleInRadians), -sinf(AngleInRadians), 0.0f, 0.0f,
+                      sinf(AngleInRadians), cosf(AngleInRadians),  0.0f, 0.0f,
+                      0.0,                  0.0f,                  1.0f, 0.0f,
+                      0.0f,                 0.0f,                  0.0f, 1.0f);
+    Matrix4f RotationY(cosf(AngleInRadians),0.0f, -sinf(AngleInRadians), 0.0f,
+                      0.0f,                 1.0f,                  0.0f, 0.0f,
+                      sinf(AngleInRadians), 0.0f,  cosf(AngleInRadians), 0.0f,
+                      0.0f,                 0.0f,                  0.0f, 1.0f);
+    Matrix4f RotationX(1.0f,                0.0f,                  0.0f,                 0.0f,
+                      0.0f,                 cosf(AngleInRadians), -sinf(AngleInRadians), 0.0f,
+                      0.0,                  sinf(AngleInRadians),  cosf(AngleInRadians), 0.0f,
+                      0.0f,                 0.0f,                  0.0f,                 1.0f);
 
-    m_Shader.setUniform(Uniform::Offset,Translation);
+
+    float Scale = scalex*10;
+
+    Matrix4f Scaling(Scale, 0.0f,  0.0f,  0.0f,
+                     0.0f,  Scale, 0.0f,  0.0f,
+                     0.0f,  0.0f,  Scale, 0.0f,
+                     0.0f,  0.0f,  0.0f,  1.0f);
+    Matrix4f Rotation=RotationX*RotationY*RotationZ;
+
+    // Pipeline p;
+    // p.WorldPos(uOffset);
+    // Matrix4f FinalTransformation=p.GetTrans();
+    Matrix4f FinalTransformation=Scaling;
+
+    //end test
+
+    m_Shader.setUniform(Uniform::Offset,FinalTransformation);
     m_Shader.bindShaders();
     v_Buff->bind();
 

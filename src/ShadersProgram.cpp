@@ -110,11 +110,6 @@ bool ShadersProgram::create(const std::array<const char *, 2> &files){
         exit(1);
     }
     
-    GLint gScaleLocation;
-    gScaleLocation = glGetUniformLocation(m_ShaderProgram,"uOffset");
-    if(gScaleLocation==-1){
-        std::cout<<"Error getting uniform location of 'gScale'\n";
-    }
     initUniforms();
     bindShaders();
 }
