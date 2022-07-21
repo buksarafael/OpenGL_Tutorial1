@@ -106,7 +106,6 @@ void gl_check_error(const char *function, const char *file, int line);
 
 void glDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum severity,
                    GLsizei length, const char *message, const void *userParam);
-
 string GetDirFromFilename(const string &Filename);
 
 #endif /* OGLDEV_UTIL_H */

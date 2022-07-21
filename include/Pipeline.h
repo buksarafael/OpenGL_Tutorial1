@@ -1,5 +1,6 @@
 #pragma once
 #include <Math3D.h>
+#include <iostream>
 class Pipeline{
     public:
     Pipeline();

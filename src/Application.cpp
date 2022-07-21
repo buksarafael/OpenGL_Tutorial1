@@ -100,44 +100,17 @@ void Application::render() {//init on first frame
     if(scalex>=0.1f||scalex<=0){
         translateDelta*=-1;
     }
-    Matrix4f Translation(1.0f,0.0f,0.0f,uOffset.x,
-                         0.0f,1.0f,0.0f,uOffset.y,
-                         0.0f,0.0f,1.0f,0.0f,
-                         0.0f,0.0f,0.0f,1.0f);
-
-
     AngleInRadians += rotateDelta;
     if ((AngleInRadians >= 1.5708f) || (AngleInRadians <= -1.5708f)) {
         rotateDelta *= -1.0f;
     }
-    Matrix4f RotationZ(cosf(AngleInRadians), -sinf(AngleInRadians), 0.0f, 0.0f,
-                      sinf(AngleInRadians), cosf(AngleInRadians),  0.0f, 0.0f,
-                      0.0,                  0.0f,                  1.0f, 0.0f,
-                      0.0f,                 0.0f,                  0.0f, 1.0f);
-    Matrix4f RotationY(cosf(AngleInRadians),0.0f, -sinf(AngleInRadians), 0.0f,
-                      0.0f,                 1.0f,                  0.0f, 0.0f,
-                      sinf(AngleInRadians), 0.0f,  cosf(AngleInRadians), 0.0f,
-                      0.0f,                 0.0f,                  0.0f, 1.0f);
-    Matrix4f RotationX(1.0f,                0.0f,                  0.0f,                 0.0f,
-                      0.0f,                 cosf(AngleInRadians), -sinf(AngleInRadians), 0.0f,
-                      0.0,                  sinf(AngleInRadians),  cosf(AngleInRadians), 0.0f,
-                      0.0f,                 0.0f,                  0.0f,                 1.0f);
-
 
     float Scale = scalex*10;
 
-    Matrix4f Scaling(Scale, 0.0f,  0.0f,  0.0f,
-                     0.0f,  Scale, 0.0f,  0.0f,
-                     0.0f,  0.0f,  Scale, 0.0f,
-                     0.0f,  0.0f,  0.0f,  1.0f);
-    Matrix4f Rotation=RotationX*RotationY*RotationZ;
-
-    // Pipeline p;
-    // p.WorldPos(uOffset);
-    // Matrix4f FinalTransformation=p.GetTrans();
-    Matrix4f FinalTransformation=Scaling;
-
-    //end test
+    Pipeline p;
+    p.WorldPos(uOffset);
+    p.Scale(scalex*10);
+    Matrix4f FinalTransformation=p.GetTrans();
 
     m_Shader.setUniform(Uniform::Offset,FinalTransformation);
     m_Shader.bindShaders();

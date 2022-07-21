@@ -36,7 +36,7 @@ void Pipeline::InitScaleTransform(Matrix4f &ScaleTrans){
     ScaleTrans=Matrix4f(m_scale.x,0.0f     ,0.0f     ,0.0f,
                         0.0f     ,m_scale.y,0.0f     ,0.0f,
                         0.0f     ,0.0f     ,m_scale.z,0.0f,
-                        0.0f     ,0.0f     ,0.0f     ,0.0f);
+                        0.0f     ,0.0f     ,0.0f     ,1.0f);
 }
 void Pipeline::InitRotateTransform(Matrix4f &RotateTrans){
     Matrix4f RotateX(1.0f,                  0.0f,                  0.0f,                 0.0f,
@@ -59,12 +59,21 @@ void Pipeline::InitTranslationTransform(Matrix4f &TranslationTrans){
                               0.0f,0.0f,1.0f,m_worldPos.z,
                               0.0f,0.0f,0.0f,1.0f);
 }
-
+bool lmao=0;
 const Matrix4f Pipeline::GetTrans(){
     Matrix4f ScaleTrans,RotateTrans,TranslationTrans;
     InitScaleTransform(ScaleTrans);
+    // if(lmao==0){
+    //     for(int i=0;i<4;i++){
+    //         for(int j=0;j<4;j++){
+    //             std::cout<<ScaleTrans.m[i][j]<<" ";
+    //         }
+    //         std::cout<<std::endl;
+    //     }
+    //     lmao=1;
+    // }
     InitRotateTransform(RotateTrans);
     InitTranslationTransform(TranslationTrans);
-    m_transformation=TranslationTrans*RotateTrans*ScaleTrans;
-    return m_transformation;
+    this->m_transformation=TranslationTrans*RotateTrans*ScaleTrans;
+    return this->m_transformation;
 }
