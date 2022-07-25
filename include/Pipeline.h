@@ -16,6 +16,7 @@ class Pipeline{
     void InitScaleTransform(Matrix4f &ScaleTrans);
     void InitRotateTransform(Matrix4f &RotateTrans);
     void InitTranslationTransform(Matrix4f &TranslationTrans);
+    void InitProjectionTransform(Matrix4f &ProjectionTrans);
     const Matrix4f GetTrans();
 
     private:

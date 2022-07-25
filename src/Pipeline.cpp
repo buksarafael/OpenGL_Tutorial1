@@ -59,21 +59,16 @@ void Pipeline::InitTranslationTransform(Matrix4f &TranslationTrans){
                               0.0f,0.0f,1.0f,m_worldPos.z,
                               0.0f,0.0f,0.0f,1.0f);
 }
+void Pipeline::InitProjectionTransform(Matrix4f &ProjectionTrans){
+    //ProjectionTrans=;
+}
 bool lmao=0;
 const Matrix4f Pipeline::GetTrans(){
-    Matrix4f ScaleTrans,RotateTrans,TranslationTrans;
+    Matrix4f ScaleTrans,RotateTrans,TranslationTrans,ProjectionTrans;
     InitScaleTransform(ScaleTrans);
-    // if(lmao==0){
-    //     for(int i=0;i<4;i++){
-    //         for(int j=0;j<4;j++){
-    //             std::cout<<ScaleTrans.m[i][j]<<" ";
-    //         }
-    //         std::cout<<std::endl;
-    //     }
-    //     lmao=1;
-    // }
     InitRotateTransform(RotateTrans);
     InitTranslationTransform(TranslationTrans);
+    //InitProjectionTransform(ProjectionTrans);
     this->m_transformation=TranslationTrans*RotateTrans*ScaleTrans;
     return this->m_transformation;
 }

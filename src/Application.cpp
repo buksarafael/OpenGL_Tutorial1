@@ -1,9 +1,10 @@
 #include <Application.h>
 Vector3f uOffset(0.0f,0.0f,0.0f);
 GLint uOffsetLocation;
-
+int m_Width,m_Height;
 bool Application::initialize(const char* window_name, int width, int height){
-
+    m_Width=width;
+    m_Height=height;
     //initializing window and context
     if (!glfwInit()){
         std::cout<<"Failed to initialize GLFW";
@@ -50,15 +51,56 @@ void Application::initVertex(){
 
     v_Lay->AddVertexAttribute(AttributeHelper::kPosition, 3);
     v_Lay->AddVertexAttribute(AttributeHelper::kColor, 3);
-    //                x     y     z     R     G      B
-    float data[] = { 0.5f, 0.5f, 0.5f, 1.0f, 0.0f,  0.0f,
-                    -0.5f, 0.5f,-0.5f, 0.0f, 1.0f,  0.0f, 
-                    -0.5f, 0.5f, 0.5f, 0.0f, 1.0f,  0.0f,
-                     0.5f,-0.5f,-0.5f, 0.0f, 1.0f,  0.0f,
-                    -0.5f,-0.5f,-0.5f, 0.0f, 1.0f,  0.0f,
-                     0.5f, 0.5f, 0.5f, 0.0f, 1.0f,  0.0f,
-                     0.5f,-0.5f,-0.5f, 0.0f, 1.0f,  0.0f,
-                    -0.5f,-0.5f,-0.5f, 0.0f, 1.0f,  0.0f};
+
+//                    x     y     z     R     G      B
+    // float data[] = { 0.5f, 0.5f, 0.5f, 1.0f, 0.0f,  0.0f,
+    //                 -0.5f, 0.5f,-0.5f, 0.0f, 1.0f,  0.0f, 
+    //                 -0.5f, 0.5f, 0.5f, 0.0f, 0.0f,  1.0f,
+    //                  0.5f,-0.5f,-0.5f, 0.0f, 1.0f,  0.0f,
+    //                 -0.5f,-0.5f,-0.5f, 0.0f, 1.0f,  0.0f,
+    //                  0.5f, 0.5f, 0.5f, 0.0f, 1.0f,  0.0f,
+    //                  0.5f,-0.5f,-0.5f, 0.0f, 1.0f,  0.0f,
+    //                 -0.5f,-0.5f,-0.5f, 0.0f, 1.0f,  0.0f};
+
+    static const GLfloat data[] = {
+    -1.0f,-1.0f,-1.0f,1.0f, 0.0f,  0.0f, // triangle 1 : begin
+    -1.0f,-1.0f, 1.0f,0.0f, 1.0f,  0.0f,
+    -1.0f, 1.0f, 1.0f,0.0f, 0.0f,  1.0f, // triangle 1 : end
+    1.0f, 1.0f,-1.0f,1.0f, 0.0f,  0.0f, // triangle 2 : begin
+    -1.0f,-1.0f,-1.0f,0.0f, 1.0f,  0.0f,
+    -1.0f, 1.0f,-1.0f,0.0f, 0.0f,  1.0f, // triangle 2 : end
+    1.0f,-1.0f, 1.0f,1.0f, 0.0f,  0.0f,
+    -1.0f,-1.0f,-1.0f,0.0f, 1.0f,  0.0f,
+    1.0f,-1.0f,-1.0f,0.0f, 0.0f,  1.0f,
+    1.0f, 1.0f,-1.0f,1.0f, 0.0f,  0.0f,
+    1.0f,-1.0f,-1.0f,0.0f, 1.0f,  0.0f,
+    -1.0f,-1.0f,-1.0f,0.0f, 0.0f,  1.0f,
+    -1.0f,-1.0f,-1.0f,1.0f, 0.0f,  0.0f,
+    -1.0f, 1.0f, 1.0f,0.0f, 1.0f,  0.0f,
+    -1.0f, 1.0f,-1.0f,0.0f, 0.0f,  1.0f,
+    1.0f,-1.0f, 1.0f,1.0f, 0.0f,  0.0f,
+    -1.0f,-1.0f, 1.0f,0.0f, 1.0f,  0.0f,
+    -1.0f,-1.0f,-1.0f,0.0f, 0.0f,  1.0f,
+    -1.0f, 1.0f, 1.0f,1.0f, 0.0f,  0.0f,
+    -1.0f,-1.0f, 1.0f,0.0f, 1.0f,  0.0f,
+    1.0f,-1.0f, 1.0f,0.0f, 0.0f,  1.0f,
+    1.0f, 1.0f, 1.0f,1.0f, 0.0f,  0.0f,
+    1.0f,-1.0f,-1.0f,0.0f, 1.0f,  0.0f,
+    1.0f, 1.0f,-1.0f,0.0f, 0.0f,  1.0f,
+    1.0f,-1.0f,-1.0f,1.0f, 0.0f,  0.0f,
+    1.0f, 1.0f, 1.0f,0.0f, 1.0f,  0.0f,
+    1.0f,-1.0f, 1.0f,0.0f, 0.0f,  1.0f,
+    1.0f, 1.0f, 1.0f,1.0f, 0.0f,  0.0f,
+    1.0f, 1.0f,-1.0f,0.0f, 1.0f,  0.0f,
+    -1.0f, 1.0f,-1.0f,0.0f, 0.0f,  1.0f,
+    1.0f, 1.0f, 1.0f,1.0f, 0.0f,  0.0f,
+    -1.0f, 1.0f,-1.0f,0.0f, 1.0f,  0.0f,
+    -1.0f, 1.0f, 1.0f,0.0f, 0.0f,  1.0f,
+    1.0f, 1.0f, 1.0f,1.0f, 0.0f,  0.0f,
+    -1.0f, 1.0f, 1.0f,0.0f, 1.0f,  0.0f,
+    1.0f,-1.0f, 1.0f,0.0f, 0.0f,  1.0f,
+};
+
     // float data[] = {-1.0f, -1.0f, 1.0f, 0.0f, 0.0f,
     //                  0.0f,  1.0f, 0.0f, 1.0f, 0.0f,
     //                  1.0f, -1.0f, 0.0f, 0.0f, 1.0f};
@@ -102,40 +144,44 @@ void Application::render() {//init on first frame
         m_Initialised=true;
     }
     //matrix test
+    // static float AngleInRadians = 0.0f;
+    // scalex+=translateDelta;
+    // scaley+=translateDelta;
+    // if(scalex>=0.1f||scalex<=0){
+    //     translateDelta*=-1;
+    // }
+    // AngleInRadians += rotateDelta;
+    // if ((AngleInRadians >= 1.5708f) || (AngleInRadians <= -1.5708f)) {
+    //     rotateDelta *= -1.0f;
+    // }
+    // float Scale = scalex*10;
 
-    static float AngleInRadians = 0.0f;
-
-    scalex+=translateDelta;
-    scaley+=translateDelta;
-    if(scalex>=0.1f||scalex<=0){
-        translateDelta*=-1;
-    }
-    AngleInRadians += rotateDelta;
-    if ((AngleInRadians >= 1.5708f) || (AngleInRadians <= -1.5708f)) {
-        rotateDelta *= -1.0f;
-    }
-    float Scale = scalex*10;
-
-
+    static float Scale=0.0f;
+    Scale+=0.02f;
     float FOV = 90.0f;
     float tanHalfFOV=tanf(ToRadian(FOV/2.0f));
-    float f = 1/tanHalfFOV;
-    Matrix4f Projection(1.0f,0.0f,0.0f,0.0f,
-                        0.0f,1.0f,0.0f,0.0f,
-                        0.0f,0.0f,1.0f,0.0f,
-                        0.0f,0.0f,0.0f,1.0f);
+
+    float d = 1/tanHalfFOV;
+    float ar=(float)m_Width/(float)m_Height;
+
+    Matrix4f Projection( d/ar,0.0f,0.0f,0.0f,
+                         0.0f,d,0.0f,0.0f,
+                         0.0f,0.0f,1.0f,0.0f,
+                         0.0f,0.0f,1.0f,0.0f);
 
     Pipeline p;
-    p.WorldPos(uOffset);
-    p.Scale(scalex*10);
-    Matrix4f FinalTransformation=p.GetTrans();
-    Matrix4f Result = FinalTransformation*Projection;
-    m_Shader.setUniform(Uniform::Offset,Result);
+    p.WorldPos(0.0f,0.0f,4.0f);
+    //p.Scale(scalex*0.5);
+    p.Rotate(0,Scale,0);
+
+    Matrix4f FinalMatrix=Projection*p.GetTrans();
+
+    m_Shader.setUniform(Uniform::Offset,FinalMatrix);
     m_Shader.bindShaders();
     v_Buff->bind();
 
-    //glDrawArrays(GL_TRIANGLES,0,3);
-    glDrawElements(GL_TRIANGLES,36,GL_UNSIGNED_INT,0);
+    glDrawArrays(GL_TRIANGLES,0,12*3);
+    //glDrawElements(GL_TRIANGLES,36,GL_UNSIGNED_INT,0);
 }
 
 void Application::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -159,4 +205,6 @@ void Application::key_callback(GLFWwindow* window, int key, int scancode, int ac
 
 void Application::window_resize(GLFWwindow *window, int width, int height){
     glViewport(0,0,width,height);
+    m_Width=width;
+    m_Height=height;
 }
