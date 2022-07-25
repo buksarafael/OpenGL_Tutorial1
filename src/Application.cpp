@@ -48,12 +48,20 @@ void Application::initVertex(){
     v_Lay = std::make_shared<VertexLayout>();
     v_Buff = std::make_shared<VertexBuffer>();
 
-    v_Lay->AddVertexAttribute(AttributeHelper::kPosition, 2);
+    v_Lay->AddVertexAttribute(AttributeHelper::kPosition, 3);
     v_Lay->AddVertexAttribute(AttributeHelper::kColor, 3);
-    //                x      y     R     G     B
-    float data[] = {-1.0f, -1.0f, 1.0f, 0.0f, 0.0f,
-                     0.0f,  1.0f, 0.0f, 1.0f, 0.0f,
-                     1.0f, -1.0f, 0.0f, 0.0f, 1.0f};
+    //                x     y     z     R     G      B
+    float data[] = { 0.5f, 0.5f, 0.5f, 1.0f, 0.0f,  0.0f,
+                    -0.5f, 0.5f,-0.5f, 0.0f, 1.0f,  0.0f, 
+                    -0.5f, 0.5f, 0.5f, 0.0f, 1.0f,  0.0f,
+                     0.5f,-0.5f,-0.5f, 0.0f, 1.0f,  0.0f,
+                    -0.5f,-0.5f,-0.5f, 0.0f, 1.0f,  0.0f,
+                     0.5f, 0.5f, 0.5f, 0.0f, 1.0f,  0.0f,
+                     0.5f,-0.5f,-0.5f, 0.0f, 1.0f,  0.0f,
+                    -0.5f,-0.5f,-0.5f, 0.0f, 1.0f,  0.0f};
+    // float data[] = {-1.0f, -1.0f, 1.0f, 0.0f, 0.0f,
+    //                  0.0f,  1.0f, 0.0f, 1.0f, 0.0f,
+    //                  1.0f, -1.0f, 0.0f, 0.0f, 1.0f};
 
     v_Buff->create(data, *v_Lay, sizeof(data) / v_Lay->size());
     v_Buff->bind();
@@ -61,7 +69,9 @@ void Application::initVertex(){
 
 void Application::run(){
     float delta_time = glfwGetTime();
-
+    glEnable(GL_CULL_FACE);
+    glFrontFace(GL_CW);
+    glCullFace(GL_BACK);
     while (!glfwWindowShouldClose(m_Window))
     {
         float now_time = glfwGetTime();
@@ -104,19 +114,28 @@ void Application::render() {//init on first frame
     if ((AngleInRadians >= 1.5708f) || (AngleInRadians <= -1.5708f)) {
         rotateDelta *= -1.0f;
     }
-
     float Scale = scalex*10;
+
+
+    float FOV = 90.0f;
+    float tanHalfFOV=tanf(ToRadian(FOV/2.0f));
+    float f = 1/tanHalfFOV;
+    Matrix4f Projection(1.0f,0.0f,0.0f,0.0f,
+                        0.0f,1.0f,0.0f,0.0f,
+                        0.0f,0.0f,1.0f,0.0f,
+                        0.0f,0.0f,0.0f,1.0f);
 
     Pipeline p;
     p.WorldPos(uOffset);
     p.Scale(scalex*10);
     Matrix4f FinalTransformation=p.GetTrans();
-
-    m_Shader.setUniform(Uniform::Offset,FinalTransformation);
+    Matrix4f Result = FinalTransformation*Projection;
+    m_Shader.setUniform(Uniform::Offset,Result);
     m_Shader.bindShaders();
     v_Buff->bind();
 
-    glDrawArrays(GL_TRIANGLES,0,3);
+    //glDrawArrays(GL_TRIANGLES,0,3);
+    glDrawElements(GL_TRIANGLES,36,GL_UNSIGNED_INT,0);
 }
 
 void Application::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
