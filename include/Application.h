@@ -28,6 +28,8 @@ private://methods
     static void key_callback(GLFWwindow*, int, int, int, int);
     static void window_resize(GLFWwindow* window,int width,int height);
 public: //members
+    int m_Width=0;
+    int m_Height=0;
     GLFWwindow* m_Window = nullptr;
     ShadersProgram m_Shader;
     std::shared_ptr<VertexBuffer> v_Buff;

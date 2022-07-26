@@ -15,6 +15,7 @@ add_executable(
 	src/Application.cpp
 	src/AttributeHelper.cpp
 	src/main.cpp
+	src/Math3D.cpp
 	src/Pipeline.cpp
 	src/shader.fs
 	src/shader.vs
