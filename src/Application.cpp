@@ -1,6 +1,6 @@
 #include <Application.h>
-Vector3f uOffset(0.0f,0.0f,0.0f);
-GLint uOffsetLocation;
+// Vector3f uOffset(0.0f,0.0f,0.0f);
+// GLint uOffsetLocation;
 bool Application::initialize(const char* window_name, int width, int height){
     //initializing window and context
     if (!glfwInit()){
@@ -128,25 +128,37 @@ float translateDelta=0.005f;
 float rotateDelta=0.01f;
 float AngleInRadians = 0.0f;
 
-void Application::render() {//init on first frame
+void Application::render() {
     glClear(GL_COLOR_BUFFER_BIT);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    if(m_Initialised==false){
+    if(m_Initialised==false){ 
         this->initAll();
         m_Initialised=true;
     }
     glfwGetFramebufferSize(m_Window,&m_Width,&m_Height);
     glViewport(0,0,m_Width,m_Height);
-    
-    static float Scale=0.0f;
-    static Pipeline p(m_Width,m_Height);
-    Scale+=2.0f;
-    p.UpdatePerspective(m_Width,m_Height);
-    p.WorldPos(uOffset.x,uOffset.y,4.0f);
+
+    //transform
+    static float Scale=2.0f;
+    static Pipeline p;
+    p.SetWorldPos(0.0f,0.0f,4.0f);
     p.Rotate(0,Scale,0);
+    
+    //camera projection
+    PersProjInfo proj;
+    proj.FOV=90.0f;
+    proj.Width=m_Width;
+    proj.Height=m_Height;
+    proj.zNear=0.0f;
+    proj.zFar=100.0f;
+    m_Camera.setProjection(proj);
+    
 
-    Matrix4f FinalMatrix=p.GetTrans();
-
+    //Setting Uniform
+    Matrix4f ModelMatrix=p.GetTrans();
+    Matrix4f ProjectionMatrix=m_Camera.getProjectionMatrix();
+    Matrix4f ViewMatrix=m_Camera.getViewMatrix();
+    Matrix4f FinalMatrix=ProjectionMatrix*ViewMatrix*ModelMatrix;
     m_Shader.setUniform(Uniform::Offset,FinalMatrix);
     m_Shader.bindShaders();
     v_Buff->bind();
@@ -160,16 +172,5 @@ void Application::key_callback(GLFWwindow* window, int key, int scancode, int ac
     Application* handler = reinterpret_cast<Application*>(glfwGetWindowUserPointer(window));
     if (key == GLFW_KEY_ESCAPE)
         glfwSetWindowShouldClose(handler->m_Window, GLFW_TRUE);
-    if(key==GLFW_KEY_UP){
-        uOffset.y+=0.05f;
-    }
-    if(key==GLFW_KEY_DOWN){
-        uOffset.y-=0.05f;
-    }
-    if(key==GLFW_KEY_LEFT){
-        uOffset.x-=0.05f;
-    }
-    if(key==GLFW_KEY_RIGHT){
-        uOffset.x+=0.05f;
-    }
+    handler->m_Camera.OnKeyboard(key);
 }

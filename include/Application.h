@@ -9,6 +9,7 @@
 #include <array>
 #include <math.h>
 #include <Pipeline.h>
+#include <Camera.h>
 class Application
 {
 public: //constructor
@@ -35,4 +36,5 @@ public: //members
     std::shared_ptr<VertexBuffer> v_Buff;
     std::shared_ptr<VertexLayout> v_Lay;
     bool m_Initialised=false;
+    Camera m_Camera;
 };

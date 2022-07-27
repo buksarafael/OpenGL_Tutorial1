@@ -14,6 +14,7 @@ add_executable(
 	TutorialApp
 	src/Application.cpp
 	src/AttributeHelper.cpp
+	src/Camera.cpp
 	src/main.cpp
 	src/Math3D.cpp
 	src/Pipeline.cpp
@@ -25,6 +26,7 @@ add_executable(
 	src/VertexLayout.cpp
 	include/Application.h
 	include/AttributeHelper.h
+	include/Camera.h
 	include/Math3D.h
 	include/ogldev_types.h
 	include/ogldev_util.h
