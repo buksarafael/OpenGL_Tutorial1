@@ -10,6 +10,7 @@
 #include <math.h>
 #include <Pipeline.h>
 #include <Camera.h>
+#include <IndexBuffer.h>
 class Application
 {
 public: //constructor
@@ -33,8 +34,9 @@ public: //members
     int m_Height=0;
     GLFWwindow* m_Window = nullptr;
     ShadersProgram m_Shader;
-    std::shared_ptr<VertexBuffer> v_Buff;
-    std::shared_ptr<VertexLayout> v_Lay;
+    std::shared_ptr<VertexBuffer> m_VertexBuffer;
+    std::shared_ptr<VertexLayout> m_VertexLayout;
+    std::shared_ptr<IndexBuffer> m_IndexBuffer;
     bool m_Initialised=false;
     Camera m_Camera;
 };

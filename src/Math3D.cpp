@@ -36,7 +36,7 @@ Vector3f Vector3f::Cross(const Vector3f &v) const {
 
 Vector3f &Vector3f::Normalize() {
   float len = Length();
-
+ 
   assert(len != 0);
 
   x /= len;

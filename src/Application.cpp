@@ -1,6 +1,4 @@
 #include <Application.h>
-// Vector3f uOffset(0.0f,0.0f,0.0f);
-// GLint uOffsetLocation;
 bool Application::initialize(const char* window_name, int width, int height){
     //initializing window and context
     if (!glfwInit()){
@@ -42,63 +40,82 @@ void Application::initShaders(){
 }
 
 void Application::initVertex(){
-    v_Lay = std::make_shared<VertexLayout>();
-    v_Buff = std::make_shared<VertexBuffer>();
+    m_VertexLayout = std::make_shared<VertexLayout>();
+    m_VertexBuffer = std::make_shared<VertexBuffer>();
+    m_IndexBuffer  = std::make_shared<IndexBuffer>();
+    
 
-    v_Lay->AddVertexAttribute(AttributeHelper::kPosition, 3);
-    v_Lay->AddVertexAttribute(AttributeHelper::kColor, 3);
+    m_VertexLayout->AddVertexAttribute(AttributeHelper::kPosition, 3);
+    m_VertexLayout->AddVertexAttribute(AttributeHelper::kColor, 3);
 
-//                    x     y     z     R     G      B
-    // float data[] = { 0.5f, 0.5f, 0.5f, 1.0f, 0.0f,  0.0f,
-    //                 -0.5f, 0.5f,-0.5f, 0.0f, 1.0f,  0.0f, 
-    //                 -0.5f, 0.5f, 0.5f, 0.0f, 0.0f,  1.0f,
-    //                  0.5f,-0.5f,-0.5f, 0.0f, 1.0f,  0.0f,
-    //                 -0.5f,-0.5f,-0.5f, 0.0f, 1.0f,  0.0f,
-    //                  0.5f, 0.5f, 0.5f, 0.0f, 1.0f,  0.0f,
-    //                  0.5f,-0.5f,-0.5f, 0.0f, 1.0f,  0.0f,
-    //                 -0.5f,-0.5f,-0.5f, 0.0f, 1.0f,  0.0f};
+//                           x     y     z     R     G      B
+    float vertex_data[] = { 0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
+                           -0.5f, 0.5f,-0.5f, 0.0f, 1.0f, 0.0f, 
+                           -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+                            0.5f,-0.5f,-0.5f, 1.0f, 0.0f, 0.0f,
+                           -0.5f,-0.5f,-0.5f, 0.0f, 1.0f, 0.0f,
+                            0.5f, 0.5f,-0.5f, 0.0f, 0.0f, 1.0f,
+                            0.5f,-0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
+                           -0.5f,-0.5f, 0.5f, 0.0f, 1.0f, 0.0f
+    };
 
-    static const GLfloat data[] = {
-    -1.0f,-1.0f,-1.0f,1.0f, 0.0f,  0.0f, // triangle 1 : begin
-    -1.0f,-1.0f, 1.0f,0.0f, 1.0f,  0.0f,
-    -1.0f, 1.0f, 1.0f,0.0f, 0.0f,  1.0f, // triangle 1 : end
-    1.0f, 1.0f,-1.0f,1.0f, 0.0f,  0.0f, // triangle 2 : begin
-    -1.0f,-1.0f,-1.0f,0.0f, 1.0f,  0.0f,
-    -1.0f, 1.0f,-1.0f,0.0f, 0.0f,  1.0f, // triangle 2 : end
-    1.0f,-1.0f, 1.0f,1.0f, 0.0f,  0.0f,
-    -1.0f,-1.0f,-1.0f,0.0f, 1.0f,  0.0f,
-    1.0f,-1.0f,-1.0f,0.0f, 0.0f,  1.0f,
-    1.0f, 1.0f,-1.0f,1.0f, 0.0f,  0.0f,
-    1.0f,-1.0f,-1.0f,0.0f, 1.0f,  0.0f,
-    -1.0f,-1.0f,-1.0f,0.0f, 0.0f,  1.0f,
-    -1.0f,-1.0f,-1.0f,1.0f, 0.0f,  0.0f,
-    -1.0f, 1.0f, 1.0f,0.0f, 1.0f,  0.0f,
-    -1.0f, 1.0f,-1.0f,0.0f, 0.0f,  1.0f,
-    1.0f,-1.0f, 1.0f,1.0f, 0.0f,  0.0f,
-    -1.0f,-1.0f, 1.0f,0.0f, 1.0f,  0.0f,
-    -1.0f,-1.0f,-1.0f,0.0f, 0.0f,  1.0f,
-    -1.0f, 1.0f, 1.0f,1.0f, 0.0f,  0.0f,
-    -1.0f,-1.0f, 1.0f,0.0f, 1.0f,  0.0f,
-    1.0f,-1.0f, 1.0f,0.0f, 0.0f,  1.0f,
-    1.0f, 1.0f, 1.0f,1.0f, 0.0f,  0.0f,
-    1.0f,-1.0f,-1.0f,0.0f, 1.0f,  0.0f,
-    1.0f, 1.0f,-1.0f,0.0f, 0.0f,  1.0f,
-    1.0f,-1.0f,-1.0f,1.0f, 0.0f,  0.0f,
-    1.0f, 1.0f, 1.0f,0.0f, 1.0f,  0.0f,
-    1.0f,-1.0f, 1.0f,0.0f, 0.0f,  1.0f,
-    1.0f, 1.0f, 1.0f,1.0f, 0.0f,  0.0f,
-    1.0f, 1.0f,-1.0f,0.0f, 1.0f,  0.0f,
-    -1.0f, 1.0f,-1.0f,0.0f, 0.0f,  1.0f,
-    1.0f, 1.0f, 1.0f,1.0f, 0.0f,  0.0f,
-    -1.0f, 1.0f,-1.0f,0.0f, 1.0f,  0.0f,
-    -1.0f, 1.0f, 1.0f,0.0f, 0.0f,  1.0f,
-    1.0f, 1.0f, 1.0f,1.0f, 0.0f,  0.0f,
-    -1.0f, 1.0f, 1.0f,0.0f, 1.0f,  0.0f,
-    1.0f,-1.0f, 1.0f,0.0f, 0.0f,  1.0f,
-};
+//     static const GLfloat data[] = {
+//     -1.0f,-1.0f,-1.0f,1.0f, 0.0f,  0.0f, // triangle 1 : begin
+//     -1.0f,-1.0f, 1.0f,0.0f, 1.0f,  0.0f,
+//     -1.0f, 1.0f, 1.0f,0.0f, 0.0f,  1.0f, // triangle 1 : end
+//     1.0f, 1.0f,-1.0f,1.0f, 0.0f,  0.0f, // triangle 2 : begin
+//     -1.0f,-1.0f,-1.0f,0.0f, 1.0f,  0.0f,
+//     -1.0f, 1.0f,-1.0f,0.0f, 0.0f,  1.0f, // triangle 2 : end
+//     1.0f,-1.0f, 1.0f,1.0f, 0.0f,  0.0f,
+//     -1.0f,-1.0f,-1.0f,0.0f, 1.0f,  0.0f,
+//     1.0f,-1.0f,-1.0f,0.0f, 0.0f,  1.0f,
+//     1.0f, 1.0f,-1.0f,1.0f, 0.0f,  0.0f,
+//     1.0f,-1.0f,-1.0f,0.0f, 1.0f,  0.0f,
+//     -1.0f,-1.0f,-1.0f,0.0f, 0.0f,  1.0f,
+//     -1.0f,-1.0f,-1.0f,1.0f, 0.0f,  0.0f,
+//     -1.0f, 1.0f, 1.0f,0.0f, 1.0f,  0.0f,
+//     -1.0f, 1.0f,-1.0f,0.0f, 0.0f,  1.0f,
+//     1.0f,-1.0f, 1.0f,1.0f, 0.0f,  0.0f,
+//     -1.0f,-1.0f, 1.0f,0.0f, 1.0f,  0.0f,
+//     -1.0f,-1.0f,-1.0f,0.0f, 0.0f,  1.0f,
+//     -1.0f, 1.0f, 1.0f,1.0f, 0.0f,  0.0f,
+//     -1.0f,-1.0f, 1.0f,0.0f, 1.0f,  0.0f,
+//     1.0f,-1.0f, 1.0f,0.0f, 0.0f,  1.0f,
+//     1.0f, 1.0f, 1.0f,1.0f, 0.0f,  0.0f,
+//     1.0f,-1.0f,-1.0f,0.0f, 1.0f,  0.0f,
+//     1.0f, 1.0f,-1.0f,0.0f, 0.0f,  1.0f,
+//     1.0f,-1.0f,-1.0f,1.0f, 0.0f,  0.0f,
+//     1.0f, 1.0f, 1.0f,0.0f, 1.0f,  0.0f,
+//     1.0f,-1.0f, 1.0f,0.0f, 0.0f,  1.0f,
+//     1.0f, 1.0f, 1.0f,1.0f, 0.0f,  0.0f,
+//     1.0f, 1.0f,-1.0f,0.0f, 1.0f,  0.0f,
+//     -1.0f, 1.0f,-1.0f,0.0f, 0.0f,  1.0f,
+//     1.0f, 1.0f, 1.0f,1.0f, 0.0f,  0.0f,
+//     -1.0f, 1.0f,-1.0f,0.0f, 1.0f,  0.0f,
+//     -1.0f, 1.0f, 1.0f,0.0f, 0.0f,  1.0f,
+//     1.0f, 1.0f, 1.0f,1.0f, 0.0f,  0.0f,
+//     -1.0f, 1.0f, 1.0f,0.0f, 1.0f,  0.0f,
+//     1.0f,-1.0f, 1.0f,0.0f, 0.0f,  1.0f,
+// };
 
-    v_Buff->create(data, *v_Lay, sizeof(data) / v_Lay->size());
-    v_Buff->bind();
+    m_VertexBuffer->create(vertex_data, *m_VertexLayout, sizeof(vertex_data) / m_VertexLayout->size());
+    m_VertexBuffer->bind();
+
+    unsigned int index_data[]={0, 1, 2,
+                              1, 3, 4,
+                              5, 6, 3,
+                              7, 3, 6,
+                              2, 4, 7,
+                              0, 7, 6,
+                              0, 5, 1,
+                              1, 5, 3,
+                              5, 0, 6,
+                              7, 4, 3,
+                              2, 1, 4,
+                              0, 2, 7};
+
+    m_IndexBuffer->create(*m_VertexBuffer,index_data,sizeof(index_data));
+    m_IndexBuffer->bind();
 }
 
 void Application::run(){
@@ -158,13 +175,13 @@ void Application::render() {
     Matrix4f ModelMatrix=p.GetTrans();
     Matrix4f ProjectionMatrix=m_Camera.getProjectionMatrix();
     Matrix4f ViewMatrix=m_Camera.getViewMatrix();
-    Matrix4f FinalMatrix=ProjectionMatrix*ViewMatrix*ModelMatrix;
+    Matrix4f FinalMatrix=ProjectionMatrix*ViewMatrix;//*ModelMatrix;
     m_Shader.setUniform(Uniform::Offset,FinalMatrix);
     m_Shader.bindShaders();
-    v_Buff->bind();
+    m_VertexBuffer->bind();
 
-    glDrawArrays(GL_TRIANGLES,0,12*3);
-    //glDrawElements(GL_TRIANGLES,36,GL_UNSIGNED_INT,0);
+    //glDrawArrays(GL_TRIANGLES,0,12*3);
+    glDrawElements(GL_TRIANGLES,36,GL_UNSIGNED_INT,0);
 }
 
 void Application::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)

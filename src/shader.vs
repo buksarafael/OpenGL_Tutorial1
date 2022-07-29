@@ -8,6 +8,6 @@ out vec3 vColor;
 
 void main()
 {
-    gl_Position = gTransformation*vec4(Position,1);
+    gl_Position = gTransformation*vec4(Position,1.0);
     vColor=Color;
 }

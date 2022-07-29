@@ -1,8 +1,8 @@
 #include <Camera.h>
 Camera::Camera(){
-    m_position = Vector3f(0.0f,0.0f,0.0f);
-    m_target   = Vector3f(0.0f,0.0f,1.0f);
-    m_up       = Vector3f(0.0f,1.0f,0.0f);
+    m_position = Vector3f(2.0f,2.0f,2.0f);
+    m_target   = Vector3f(0.0f,0.0f,0.0f);
+    m_up       = Vector3f(0.0f,0.0f,1.0f);
 }
 void Camera::SetPosition(float x,float y,float z){
     m_position.x=x;
@@ -42,35 +42,36 @@ void Camera::UpdatePerspective(int width,int height){
     m_perspective.Height=height;
 }
 void Camera::OnKeyboard(int key){
+    Vector3f toTarget=m_target-m_position;
+    toTarget.z=0.0f;
+    toTarget.Normalize();
     switch(key){
         case GLFW_KEY_UP:{
-            m_position+=(m_target*m_speed);
+            m_position+=toTarget*m_speed;
             break;
         }
         case GLFW_KEY_DOWN:{
-            m_position-=(m_target*m_speed);
+            m_position-=toTarget*m_speed;
         }
             break;
         case GLFW_KEY_LEFT:{
-            Vector3f Left=m_target.Cross(m_up);
+            Vector3f Left=toTarget.Cross(m_up);
             Left.Normalize();
             Left*=m_speed;
             m_position+=Left;
         }
             break;
         case GLFW_KEY_RIGHT:{
-            Vector3f Right=m_up.Cross(m_target);
+            Vector3f Right=m_up.Cross(toTarget);
             Right.Normalize();
             Right*=m_speed;
             m_position+=Right;
         }
             break;
         case GLFW_KEY_PAGE_UP:
-            //m_target.y+=m_speed;
             m_position.y+=m_speed;
             break;
         case GLFW_KEY_PAGE_DOWN:
-            //m_target.y-=m_speed;
             m_position.y-=m_speed;
             break;
         case GLFW_KEY_KP_ADD:

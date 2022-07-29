@@ -15,6 +15,7 @@ add_executable(
 	src/Application.cpp
 	src/AttributeHelper.cpp
 	src/Camera.cpp
+	src/IndexBuffer.cpp
 	src/main.cpp
 	src/Math3D.cpp
 	src/Pipeline.cpp
@@ -27,6 +28,7 @@ add_executable(
 	include/Application.h
 	include/AttributeHelper.h
 	include/Camera.h
+	include/Indexbuffer.h
 	include/Math3D.h
 	include/ogldev_types.h
 	include/ogldev_util.h
