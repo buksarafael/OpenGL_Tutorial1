@@ -35,8 +35,8 @@ void Application::initAll(){
     this->initShaders();
 }
 void Application::initShaders(){
-    const char* pVSFileName = "/Users/rafaelb/Desktop/Tutorial1/src/shader.vs";
-    const char* pFSFileName = "/Users/rafaelb/Desktop/Tutorial1/src/shader.fs";
+    const char* pVSFileName = "/Users/rafaelb/Desktop/Tutorial1/shaders/shader.vs";
+    const char* pFSFileName = "/Users/rafaelb/Desktop/Tutorial1/shaders/shader.fs";
     std::array <const char*,2> files={pVSFileName,pFSFileName};
     m_Shader.create(files);
 }

@@ -76,7 +76,10 @@ void ShadersProgram::setUniform(Uniform uniform,Vector4f& vec4f){
 void ShadersProgram::setUniform(Uniform uniform,Matrix4f& mat4f){
     glUniformMatrix4fv(uniform,1,GL_TRUE,&mat4f.m[0][0]);
 }
-
+bool ShadersProgram::create(const char *vs,const char *fs){
+    std::array<const char*,2> files={vs,fs};
+    create(files);
+    }
 bool ShadersProgram::create(const std::array<const char *, 2> &files){
     this->m_ShaderProgram=glCreateProgram();
  

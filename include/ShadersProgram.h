@@ -20,6 +20,7 @@ private:
 
 public:
 	bool create(const std::array<const char *, 2> &files);
+	bool create(const char *vs,const char *fs);
 	GLint getUniformPosition(Uniform uniform);
 	void setUniform(Uniform,int value);
 	void setUniform(Uniform,float value);

@@ -19,13 +19,14 @@ add_executable(
 	src/main.cpp
 	src/Math3D.cpp
 	src/Pipeline.cpp
-	src/shader.fs
-	src/shader.vs
+	src/ResourceManager.cpp
 	src/ShadersProgram.cpp
 	src/Texture.cpp
 	src/UniformHelper.cpp
 	src/VertexBuffer.cpp
 	src/VertexLayout.cpp
+	shaders/shader.fs
+	shaders/shader.vs
 	include/Application.h
 	include/AttributeHelper.h
 	include/Camera.h
@@ -34,6 +35,7 @@ add_executable(
 	include/ogldev_types.h
 	include/ogldev_util.h
 	include/Pipeline.h
+	include/ResourceManager.h
 	include/ShadersProgram.h
 	include/stb_image.h
 	include/Texture.h
@@ -48,6 +50,7 @@ add_executable(
 target_include_directories(TutorialApp PUBLIC
  ${GLFW_INCLUDE_DIRS}
  ${CMAKE_CURRENT_SOURCE_DIR}/include
+ ${CMAKE_CURRENT_SOURCE_DIR}/shaders
  )
 target_link_directories(TutorialApp PUBLIC ${GLFW_LIBRARY_DIRS})
 target_link_libraries(TutorialApp PUBLIC ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} )
