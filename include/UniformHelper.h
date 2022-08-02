@@ -4,12 +4,12 @@
 
 struct UniformData;
 enum Uniform{
-    Offset=0,
-    Model,
-    View,
-    Projection,
-    MVP,
-    Texture,
+    uOffset=0,
+    uModel,
+    uView,
+    uProjection,
+    uMVP,
+    uTexture,
 
     Count
 };

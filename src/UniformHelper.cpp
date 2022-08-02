@@ -7,12 +7,12 @@ struct UniformData{
 UniformData::UniformData(){
     uniforms = std::array<std::pair<const char*,Uniform>, (std::size_t)Uniform::Count>
     {
-        std::pair<const char*,Uniform>{"Offset",Uniform::Offset},
-        std::pair<const char*,Uniform>{"Model",Uniform::Model},
-        std::pair<const char*,Uniform>{"View",Uniform::View},
-        std::pair<const char*,Uniform>{"Projection",Uniform::Projection},
-        std::pair<const char*,Uniform>{"MVP",Uniform::MVP},
-        std::pair<const char*,Uniform>{"Texture",Uniform::Texture}
+        std::pair<const char*,Uniform>{"Offset",Uniform::uOffset},
+        std::pair<const char*,Uniform>{"Model",Uniform::uModel},
+        std::pair<const char*,Uniform>{"View",Uniform::uView},
+        std::pair<const char*,Uniform>{"Projection",Uniform::uProjection},
+        std::pair<const char*,Uniform>{"MVP",Uniform::uMVP},
+        std::pair<const char*,Uniform>{"Texture",Uniform::uTexture}
     };
 }
 

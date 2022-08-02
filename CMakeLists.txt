@@ -22,6 +22,7 @@ add_executable(
 	src/shader.fs
 	src/shader.vs
 	src/ShadersProgram.cpp
+	src/Texture.cpp
 	src/UniformHelper.cpp
 	src/VertexBuffer.cpp
 	src/VertexLayout.cpp
@@ -34,6 +35,8 @@ add_executable(
 	include/ogldev_util.h
 	include/Pipeline.h
 	include/ShadersProgram.h
+	include/stb_image.h
+	include/Texture.h
 	include/UniformHelper.h
 	include/VertexAttribute.h
 	include/VertexBuffer.h

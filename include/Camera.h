@@ -12,7 +12,9 @@ class Camera{
     void SetPosition(Vector3f pos);
     void UpdatePerspective(int width,int height);
     void setProjection(PersProjInfo &p);
-    void OnKeyboard(int key);
+    Vector3f getPosition();
+    Vector3f getTarget();
+    Vector3f OnKeyboard(int key,Vector3f camera_pos,Vector3f camera_target);
     Matrix4f getProjectionMatrix();
     Matrix4f getViewMatrix();
 

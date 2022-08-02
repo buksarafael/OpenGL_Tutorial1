@@ -9,6 +9,9 @@ const char *AttributeHelper::getAttributeName(const AttributeType t){
         case AttributeHelper::AttributeType::kPosition:
             return "Position";
             break;
+        case AttributeHelper::AttributeType::kUV:
+            return "UV";
+            break;
         case AttributeHelper::AttributeType::kAttributeCount:
             return "AttributeCount";
             break;

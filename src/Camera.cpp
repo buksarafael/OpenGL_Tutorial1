@@ -2,7 +2,7 @@
 Camera::Camera(){
     m_position = Vector3f(2.0f,2.0f,2.0f);
     m_target   = Vector3f(0.0f,0.0f,0.0f);
-    m_up       = Vector3f(0.0f,0.0f,1.0f);
+    m_up       = Vector3f(0.0f,1.0f,0.0f);
 }
 void Camera::SetPosition(float x,float y,float z){
     m_position.x=x;
@@ -35,58 +35,53 @@ void Camera::setProjection(PersProjInfo &p){
 }
 Matrix4f Camera::getProjectionMatrix(){
     return m_ProjectionMatrix;
-    
+}
+Vector3f Camera::getPosition(){
+    return m_position;
+}
+Vector3f Camera::getTarget(){
+    return m_target;
 }
 void Camera::UpdatePerspective(int width,int height){
     m_perspective.Width=width;
     m_perspective.Height=height;
 }
-void Camera::OnKeyboard(int key){
-    Vector3f toTarget=m_target-m_position;
-    toTarget.z=0.0f;
+Vector3f Camera::OnKeyboard(int key,Vector3f camera_pos,Vector3f camera_target){
+    Vector3f distance = Vector3f(0.0f,0.0f,0.0f);
+    Vector3f toTarget=camera_target-camera_pos;
+    //toTarget.z=0.0f;
     toTarget.Normalize();
     switch(key){
         case GLFW_KEY_UP:{
-            m_position+=toTarget*m_speed;
+            distance+=toTarget;
             break;
         }
         case GLFW_KEY_DOWN:{
-            m_position-=toTarget*m_speed;
+            distance-=toTarget;
         }
             break;
         case GLFW_KEY_LEFT:{
-            Vector3f Left=toTarget.Cross(m_up);
+            Vector3f Left=toTarget.Cross(Vector3f(0.0f,1.0f,0.0f));
             Left.Normalize();
-            Left*=m_speed;
-            m_position+=Left;
+            //Left*=m_speed;
+            distance+=Left;
         }
             break;
         case GLFW_KEY_RIGHT:{
-            Vector3f Right=m_up.Cross(toTarget);
+            Vector3f Right=Vector3f(0.0f,1.0f,0.0f).Cross(toTarget);
             Right.Normalize();
-            Right*=m_speed;
-            m_position+=Right;
+            //Right*=m_speed;
+            distance+=Right;
         }
             break;
         case GLFW_KEY_PAGE_UP:
-            m_position.y+=m_speed;
+            distance=Vector3f(0.0f,1.0f,0.0f);
             break;
         case GLFW_KEY_PAGE_DOWN:
-            m_position.y-=m_speed;
-            break;
-        case GLFW_KEY_KP_ADD:
-            m_speed+=0.1f;
-            std::cout<<"Changed speed to "<<m_speed<<std::endl;
-            break;
-        case GLFW_KEY_KP_SUBTRACT:{
-            m_speed-=0.1f;
-            if(m_speed<0.1f){
-                m_speed=0.1f;
-            }
-            std::cout<<"Changed speed to "<<m_speed<<std::endl;
-        }
+            distance=Vector3f(0.0f,-1.0f,0.0f);
             break;
     }
     std::cout<<"Target("<<m_target.x<<","<<m_target.y<<","<<m_target.z<<")"<<std::endl;
     std::cout<<"Position("<<m_position.x<<","<<m_position.y<<","<<m_position.z<<")"<<std::endl<<std::endl;
+    return distance;
 }

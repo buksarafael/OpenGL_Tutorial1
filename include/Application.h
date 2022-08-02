@@ -10,6 +10,7 @@
 #include <math.h>
 #include <Pipeline.h>
 #include <Camera.h>
+#include <Texture.h>
 #include <IndexBuffer.h>
 class Application
 {

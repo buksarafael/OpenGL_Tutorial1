@@ -1,4 +1,6 @@
 #include <Application.h>
+Texture* pTexture=NULL;
+GLuint gSamplerLocation;
 bool Application::initialize(const char* window_name, int width, int height){
     //initializing window and context
     if (!glfwInit()){
@@ -46,18 +48,26 @@ void Application::initVertex(){
     
 
     m_VertexLayout->AddVertexAttribute(AttributeHelper::kPosition, 3);
-    m_VertexLayout->AddVertexAttribute(AttributeHelper::kColor, 3);
+    m_VertexLayout->AddVertexAttribute(AttributeHelper::kColor, 2);
 
 //                           x     y     z     R     G      B
-    float vertex_data[] = { 0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
-                           -0.5f, 0.5f,-0.5f, 0.0f, 1.0f, 0.0f, 
-                           -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
-                            0.5f,-0.5f,-0.5f, 1.0f, 0.0f, 0.0f,
-                           -0.5f,-0.5f,-0.5f, 0.0f, 1.0f, 0.0f,
-                            0.5f, 0.5f,-0.5f, 0.0f, 0.0f, 1.0f,
-                            0.5f,-0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
-                           -0.5f,-0.5f, 0.5f, 0.0f, 1.0f, 0.0f
-    };
+    // float vertex_data[] = { 0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
+    //                        -0.5f, 0.5f,-0.5f, 0.0f, 1.0f, 0.0f, 
+    //                        -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+    //                         0.5f,-0.5f,-0.5f, 1.0f, 0.0f, 0.0f,
+    //                        -0.5f,-0.5f,-0.5f, 0.0f, 1.0f, 0.0f,
+    //                         0.5f, 0.5f,-0.5f, 0.0f, 0.0f, 1.0f,
+    //                         0.5f,-0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
+    //                        -0.5f,-0.5f, 0.5f, 0.0f, 1.0f, 0.0f
+    // };
+    float vertex_data[] = {0.5f, 0.5f, 0.5f, 0.0f, 0.0f,   //0 gata
+                           -0.5f, 0.5f,-0.5f, 0.0f, 1.0f,  //1 gata
+                           -0.5f, 0.5f, 0.5f, 1.0f, 0.0f,  //2 gata
+                            0.5f,-0.5f,-0.5f, 1.0f, 1.0f,  //3 gata
+                           -0.5f,-0.5f,-0.5f, 0.0f, 0.0f,  //4 gata
+                            0.5f, 0.5f,-0.5f, 1.0f, 0.0f,  //5 gata
+                            0.5f,-0.5f, 0.5f, 0.0f, 1.0f,  //6
+                           -0.5f,-0.5f, 0.5f, 1.0f, 1.0f}; //7
 
 //     static const GLfloat data[] = {
 //     -1.0f,-1.0f,-1.0f,1.0f, 0.0f,  0.0f, // triangle 1 : begin
@@ -107,12 +117,13 @@ void Application::initVertex(){
                               7, 3, 6,
                               2, 4, 7,
                               0, 7, 6,
-                              0, 5, 1,
-                              1, 5, 3,
-                              5, 0, 6,
+                              0, 5, 1, 
+                              1, 5, 3, 
+                              5, 0, 6, 
                               7, 4, 3,
-                              2, 1, 4,
-                              0, 2, 7};
+                              2, 1, 4, 
+                              0, 2, 7
+                              };
 
     m_IndexBuffer->create(*m_VertexBuffer,index_data,sizeof(index_data));
     m_IndexBuffer->bind();
@@ -123,6 +134,10 @@ void Application::run(){
     glEnable(GL_CULL_FACE);
     glFrontFace(GL_CW);
     glCullFace(GL_BACK);
+    pTexture=new Texture(GL_TEXTURE_2D,"/Users/rafaelb/Desktop/Tutorial1/assets/bricks.jpeg");
+    if(!pTexture->load()){
+        exit(200);
+    }
     while (!glfwWindowShouldClose(m_Window))
     {
         float now_time = glfwGetTime();
@@ -176,7 +191,11 @@ void Application::render() {
     Matrix4f ProjectionMatrix=m_Camera.getProjectionMatrix();
     Matrix4f ViewMatrix=m_Camera.getViewMatrix();
     Matrix4f FinalMatrix=ProjectionMatrix*ViewMatrix;//*ModelMatrix;
-    m_Shader.setUniform(Uniform::Offset,FinalMatrix);
+    m_Shader.setUniform(Uniform::uOffset,FinalMatrix);
+
+    pTexture->bind(GL_TEXTURE0);
+    glUniform1i(gSamplerLocation,0);
+    
     m_Shader.bindShaders();
     m_VertexBuffer->bind();
 
@@ -189,5 +208,5 @@ void Application::key_callback(GLFWwindow* window, int key, int scancode, int ac
     Application* handler = reinterpret_cast<Application*>(glfwGetWindowUserPointer(window));
     if (key == GLFW_KEY_ESCAPE)
         glfwSetWindowShouldClose(handler->m_Window, GLFW_TRUE);
-    handler->m_Camera.OnKeyboard(key);
+    handler->m_Camera.Move(handler->m_Camera.OnKeyboard(key,handler->m_Camera.getPosition(),handler->m_Camera.getTarget()));
 }

@@ -5,6 +5,7 @@ struct AttributeHelper{
     {
         kPosition = 0,
         kColor,
+        kUV,
         kAttributeCount
     };
     static const char* getAttributeName(const AttributeType t);
