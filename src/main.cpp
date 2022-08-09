@@ -1,9 +1,9 @@
 #include <iostream>
-#include <Application.h>
+#include <Engine.h>
 int main(int argc, const char * argv[]) {
-    Application a;
-    if(!a.initialize("Straja",800,600))
+    Engine e;
+    if(!e.initialize("Straja",800,600))
         return -1;
-    a.run();
+    e.run();
     return 0;
 }

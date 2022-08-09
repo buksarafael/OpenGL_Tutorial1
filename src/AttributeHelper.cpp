@@ -25,5 +25,8 @@ AttributeHelper::getAttributeType(const char *attribute_name){
         return AttributeHelper::AttributeType::kColor;
     if(strcmp(attribute_name,"Position")==0)
         return AttributeHelper::AttributeType::kPosition;
+    if(strcmp(attribute_name,"UV")==0)
+        return AttributeHelper::AttributeType::kUV;
+    
     return AttributeHelper::AttributeType::kAttributeCount;
 }

@@ -12,6 +12,7 @@ class Camera{
     void SetPosition(Vector3f pos);
     void UpdatePerspective(int width,int height);
     void setProjection(PersProjInfo &p);
+    void setProjection(float width,float height);
     Vector3f getPosition();
     Vector3f getTarget();
     Vector3f OnKeyboard(int key,Vector3f camera_pos,Vector3f camera_target);
@@ -25,5 +26,7 @@ class Camera{
     Vector3f m_position;
     Vector3f m_target;
     Vector3f m_up;
-    float m_speed=1.0f;
+    float m_FOV=90.f;
+    float m_zNear=0.0f;
+    float m_zFar=100.0f;
 };

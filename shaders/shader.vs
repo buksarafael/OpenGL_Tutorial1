@@ -1,8 +1,8 @@
 #version 330 core
 
-layout (location = 0) in vec3 Position;
-//layout (location = 1) in vec3 Color;
-layout (location = 1) in vec2 TexCoord;
+in vec3 Position;
+//in vec3 Color;
+in vec2 TexCoord;
 
 uniform mat4 gTransformation;
 //out vec3 vColor;

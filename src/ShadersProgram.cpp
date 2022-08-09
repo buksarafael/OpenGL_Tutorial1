@@ -1,4 +1,5 @@
 #include <ShadersProgram.h>
+#include <AttributeHelper.h>
 bool readFile(const char* pFileName, std::string& outFile){
     std::ifstream f(pFileName);
     bool ret=false;
@@ -79,6 +80,7 @@ void ShadersProgram::setUniform(Uniform uniform,Matrix4f& mat4f){
 bool ShadersProgram::create(const char *vs,const char *fs){
     std::array<const char*,2> files={vs,fs};
     create(files);
+    return true;
     }
 bool ShadersProgram::create(const std::array<const char *, 2> &files){
     this->m_ShaderProgram=glCreateProgram();
@@ -105,6 +107,11 @@ bool ShadersProgram::create(const std::array<const char *, 2> &files){
     GLint Success=0;
     GLchar ErrorLog[1024]={0};
 
+    for(std::size_t i = 0; i < AttributeHelper::kAttributeCount;i++)
+    {
+        glBindAttribLocation(m_ShaderProgram, i, AttributeHelper::getAttributeName((AttributeHelper::AttributeType)i));
+    }
+
     glLinkProgram(m_ShaderProgram);
     glGetProgramiv(m_ShaderProgram,GL_LINK_STATUS,&Success);
     if(Success==0){
@@ -114,9 +121,9 @@ bool ShadersProgram::create(const std::array<const char *, 2> &files){
     }
     
     initUniforms();
-    bindShaders();
+    
+    //return true;
 }
 void ShadersProgram::bindShaders(){
-    glValidateProgram(this->m_ShaderProgram);
     glUseProgram(this->m_ShaderProgram);
 }

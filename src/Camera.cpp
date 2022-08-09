@@ -33,6 +33,15 @@ void Camera::setProjection(PersProjInfo &p){
     m_perspective.Height=p.Height;
     m_ProjectionMatrix.InitPersProjTransform(m_perspective);
 }
+void Camera::setProjection(float width,float height){
+    PersProjInfo p;
+    p.FOV=m_FOV;
+    p.Height=height;
+    p.Width=width;
+    p.zFar=m_zFar;
+    p.zNear=m_zNear;
+    setProjection(p);
+}
 Matrix4f Camera::getProjectionMatrix(){
     return m_ProjectionMatrix;
 }
@@ -43,8 +52,9 @@ Vector3f Camera::getTarget(){
     return m_target;
 }
 void Camera::UpdatePerspective(int width,int height){
-    m_perspective.Width=width;
-    m_perspective.Height=height;
+//    m_perspective.Width=width;
+//    m_perspective.Height=height;
+    setProjection(width, height);
 }
 Vector3f Camera::OnKeyboard(int key,Vector3f camera_pos,Vector3f camera_target){
     Vector3f distance = Vector3f(0.0f,0.0f,0.0f);

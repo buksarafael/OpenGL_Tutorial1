@@ -14,8 +14,6 @@ public:
 	GLuint m_ShaderProgram=0;
 
 private:
-	const char* m_VSFilePath = "/Users/rafaelb/Desktop/Tutorial1/src/shader.vs";
-	const char* m_FSFilePath = "/Users/rafaelb/Desktop/Tutorial1/src/shader.fs";
 	std::array<GLuint,(std::size_t)Uniform::Count>m_Uniforms;
 
 public:

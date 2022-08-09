@@ -1,8 +1,7 @@
 #include <Texture.h>
 #include <stb_image.h>
 #include <iostream>
-Texture::Texture(GLenum TextureTarget,const std::string& FileName){
-    m_textureTarget=TextureTarget;
+Texture::Texture(const std::string &FileName){
     m_filename=FileName;
 }
 bool Texture::load(){
@@ -15,7 +14,7 @@ bool Texture::load(){
     }
     glGenTextures(1,&m_textureObj);
     glBindTexture(m_textureTarget,m_textureObj);
-    if(m_textureTarget==GL_TEXTURE_2D){ 
+    if(m_textureTarget==GL_TEXTURE_2D){
         glTexImage2D(m_textureTarget,0,GL_RGB,width,height,0,GL_RGB,GL_UNSIGNED_BYTE,image_data);
     }
     else{
@@ -29,7 +28,7 @@ bool Texture::load(){
     return true;
 }
 
-void Texture::bind(GLenum TextureUnit){
-    glActiveTexture(TextureUnit);
+void Texture::bind(int tslot){
+    glActiveTexture(GL_TEXTURE0 + tslot);
     glBindTexture(m_textureTarget,m_textureObj);
 }   

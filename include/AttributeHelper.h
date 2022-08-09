@@ -4,8 +4,9 @@ struct AttributeHelper{
 	enum AttributeType
     {
         kPosition = 0,
-        kColor,
         kUV,
+        kColor,
+        
         kAttributeCount
     };
     static const char* getAttributeName(const AttributeType t);

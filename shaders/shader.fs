@@ -8,6 +8,6 @@ in vec2 TexCoord0;
 
 void main()
 {
-    //FragColor = vec4(vColor.x,vColor.y,vColor.z,0.0);
+    //FragColor = vec4(TexCoord0.xy,0.0,0.0);
     FragColor=texture(gSampler,TexCoord0);
 }

@@ -24,7 +24,6 @@ void ResourceManager::load_shaders(const std::string name,std::shared_ptr<Shader
     auto path = m_Shaders+name;
     auto v_path=path+".vs";
     auto f_path=path+".fs";
-
     auto shader = std::make_shared<ShadersProgram>();
     if(!shader->create(v_path.c_str(),f_path.c_str())){
         std::cout<<"Error creating shaders!"<<std::endl;

@@ -15,8 +15,8 @@ class ResourceManager{
     std::shared_ptr<Texture> getTexture(const std::string textureName);
 
     private:
-    static inline std::string m_Shaders = "/Users/rafaelb/Desktop/Tutorial1/shaders";
-    static inline std::string m_Textures= "/Users/rafaelb/Desktop/Tutorial1/assets";
+    static inline std::string m_Shaders = "/Users/rafaelb/Desktop/Tutorial1/shaders/";
+    static inline std::string m_Textures= "/Users/rafaelb/Desktop/Tutorial1/assets/";
 
     void load_shaders(const std::string shader_file,std::shared_ptr<ShadersProgram>&);
     void load_textures(const std::string texture_file,std::shared_ptr<Texture>&);
