@@ -1,6 +1,7 @@
 #include <Texture.h>
 #include <stb_image.h>
 #include <iostream>
+std::hash<std::string> Texture::m_HashObj;
 Texture::Texture(const std::string &FileName){
     m_filename=FileName;
 }
@@ -25,6 +26,7 @@ bool Texture::load(){
     glTexParameterf(m_textureTarget,GL_TEXTURE_WRAP_S, GL_CLAMP);
     glTexParameterf(m_textureTarget,GL_TEXTURE_WRAP_T,GL_CLAMP);
     glBindTexture(m_textureTarget,0);
+    m_Hash=m_HashObj(m_filename);
     return true;
 }
 
