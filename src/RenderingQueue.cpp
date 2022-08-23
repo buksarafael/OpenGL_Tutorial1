@@ -1,8 +1,9 @@
 #include <RenderingQueue.h>
 #include <IndexBuffer.h>
-#include <algorithm>
+#include <RenderPacket.h>
 #include <UniformList.h>
 #include <VertexBuffer.h>
+#include <algorithm>
 #include <vector>
 
 IUniformNode *RenderingQueue::create_uniform(IUniformNode *prev, Uniform type,int value){
@@ -68,7 +69,7 @@ void RenderingQueue::draw_all() {
 
     if (active_shader != packet.shader) {
       active_shader = packet.shader;
-      active_shader->bind();
+      active_shader->bindShaders();
     }
 
     if (packet.first_uniform != nullptr)
