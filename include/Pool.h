@@ -11,7 +11,7 @@ template <typename T> class Pool{
     std::size_t m_Index=0;
     public:
     Pool(std::size_t initial_size=10000){
-        m_buffer.resize(initial_size);
+        m_Buffer.resize(initial_size);
     }
     void clear(){
         m_Index=0;

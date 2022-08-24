@@ -10,6 +10,7 @@
 #include <IndexBuffer.h>
 #include <ResourceManager.h>
 #include <Pipeline.h>
+#include <RenderingQueue.h>
 
 class Engine : public Application{
 private:
@@ -21,6 +22,7 @@ private:
     std::shared_ptr<IndexBuffer> m_IndexBuffer;
     std::shared_ptr<ShadersProgram> m_Shader;
     std::shared_ptr<Texture> m_Texture;
+    RenderingQueue m_RenderQueue;
 private:
 void initBuffer();
 void initShaders();

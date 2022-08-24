@@ -33,4 +33,8 @@ bool Texture::load(){
 void Texture::bind(int tslot){
     glActiveTexture(GL_TEXTURE0 + tslot);
     glBindTexture(m_textureTarget,m_textureObj);
-}   
+}  
+
+const uint64_t &Texture::get_hash() const { 
+    return m_Hash; 
+}

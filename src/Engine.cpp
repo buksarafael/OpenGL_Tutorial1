@@ -1,8 +1,13 @@
 #include <Engine.h>
+#include <RenderPacket.h>
 bool Engine::initialize(const char* window_name,int width,int height){
     if(!initWindow(window_name,width,height)){
         std::cout<<"Failed to initialize window!"<<std::endl;
     }
+
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_ALWAYS);
+
     glEnable(GL_CULL_FACE);
     glFrontFace(GL_CW);
     glCullFace(GL_BACK);
@@ -17,20 +22,38 @@ bool Engine::initialize(const char* window_name,int width,int height){
 }
 
 void Engine::render(){
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClearDepth(1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0.2f,0.3f,0.3f,1.0f);
-
     glfwGetFramebufferSize(m_Window,&m_Width,&m_Height);
     glViewport(0,0,m_Width,m_Height);
     m_Camera.UpdatePerspective(m_Width, m_Height);
-    
     auto mvp=m_Camera.getProjectionMatrix()*m_Camera.getViewMatrix()*m_Model.GetTrans();
-    m_Shader->setUniform(Uniform::uOffset,mvp);
-    m_Shader->setUniform(Uniform::uTexture,1);
-    m_Texture->bind(1);
-    m_Shader->bindShaders();
-    m_VertexBuffer->bind();
-    glDrawElements(GL_TRIANGLES,36,GL_UNSIGNED_INT,0);
+    
+//    m_Shader->setUniform(Uniform::uOffset,mvp);
+//    m_Shader->setUniform(Uniform::uTexture,1);
+//    m_Texture->bind(1);
+//    m_Shader->bindShaders();
+//    m_VertexBuffer->bind();
+//    glDrawElements(GL_TRIANGLES,36,GL_UNSIGNED_INT,0);
+
+
+    auto *wvp= m_RenderQueue.create_uniform(nullptr,Uniform::uOffset,mvp);
+    auto *text = m_RenderQueue.create_texture(nullptr,m_Texture.get(),Uniform::uTexture);
+
+    RenderPacket packet;
+    packet.vbuff = m_VertexBuffer.get();
+    packet.ibuff = m_IndexBuffer.get();
+    packet.shader = m_Shader.get();
+    packet.topology = GL_TRIANGLES;
+    packet.primitive_start = 0;
+    packet.primitive_end = m_IndexBuffer->getSize()/4;
+    packet.first_texture = text;
+    packet.first_uniform = wvp;
+
+    m_RenderQueue.push_rendering_packet(packet);
+    m_RenderQueue.draw_all();
+    m_RenderQueue.clear();
 }
 
 void Engine::initBuffer(){
@@ -54,17 +77,19 @@ void Engine::initBuffer(){
     m_VertexBuffer->create(vertex_data,*m_VertexLayout,sizeof(vertex_data)/m_VertexLayout->size());
     m_VertexBuffer->bind();
     unsigned int index_data[]={0, 1, 2,
-                              1, 3, 4,
-                              5, 6, 3,
-                              7, 3, 6,
-                              2, 4, 7,
-                              0, 7, 6,
-                              0, 5, 1, 
-                              1, 5, 3, 
-                              5, 0, 6, 
-                              7, 4, 3,
-                              2, 1, 4, 
-                              0, 2, 7};
+                               1, 3, 4,
+                               5, 6, 3,
+                               7, 3, 6,
+                               2, 4, 7,
+                               0, 7, 6,
+                               0, 5, 1, 
+                               1, 5, 3, 
+                               5, 0, 6, 
+                               7, 4, 3,
+                               2, 1, 4, 
+                               0, 2, 7
+                              };
+
     m_IndexBuffer->create(*m_VertexBuffer,index_data,sizeof(index_data));
     m_IndexBuffer->bind();
 }

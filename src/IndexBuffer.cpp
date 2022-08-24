@@ -16,3 +16,6 @@ void IndexBuffer::create(const VertexBuffer &vertex_buffer,const uint32_t *data,
     glBindBuffer(GL_ARRAY_BUFFER,0);
     m_Size=size;
 }
+std::size_t IndexBuffer::getSize(){
+    return m_Size;
+}

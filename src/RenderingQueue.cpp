@@ -46,7 +46,6 @@ void RenderingQueue::clear(){
 }
 
 void RenderingQueue::draw_all() {
-  // std::sort(m_Packets.begin(), m_Packets.end(), RenderPacket::compare);
 
   VertexBuffer *current_vbo = nullptr;
   IndexBuffer *current_ibo = nullptr;
@@ -99,7 +98,7 @@ void RenderingQueue::draw_all() {
     }
   }
 
-  current_vbo->unbind();
+  //current_vbo->unbind();
 }
 
 void RenderingQueue::draw_vbo(GLenum topology, std::size_t primitive_start,

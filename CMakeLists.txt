@@ -20,10 +20,13 @@ add_executable(
 	src/main.cpp
 	src/Math3D.cpp
 	src/Pipeline.cpp
+	src/RenderingQueue.cpp
+	src/RenderPacket.cpp
 	src/ResourceManager.cpp
 	src/ShadersProgram.cpp
 	src/Texture.cpp
 	src/UniformHelper.cpp
+	src/UniformList.cpp
 	src/VertexBuffer.cpp
 	src/VertexLayout.cpp
 	shaders/shader.fs
@@ -37,11 +40,15 @@ add_executable(
 	include/ogldev_types.h
 	include/ogldev_util.h
 	include/Pipeline.h
+	include/Pool.h
+	include/RenderingQueue.h
+	include/RenderPacket.h
 	include/ResourceManager.h
 	include/ShadersProgram.h
 	include/stb_image.h
 	include/Texture.h
 	include/UniformHelper.h
+	include/UniformList.h
 	include/VertexAttribute.h
 	include/VertexBuffer.h
 	include/VertexLayout.h
