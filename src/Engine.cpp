@@ -1,9 +1,11 @@
 #include <Engine.h>
 #include <RenderPacket.h>
+#include <PerlinNoise.h>
 bool Engine::initialize(const char* window_name,int width,int height){
     if(!initWindow(window_name,width,height)){
         std::cout<<"Failed to initialize window!"<<std::endl;
     }
+
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_ALWAYS);
@@ -29,14 +31,6 @@ void Engine::render(){
     glViewport(0,0,m_Width,m_Height);
     m_Camera.UpdatePerspective(m_Width, m_Height);
     auto mvp=m_Camera.getProjectionMatrix()*m_Camera.getViewMatrix()*m_Model.GetTrans();
-    
-//    m_Shader->setUniform(Uniform::uOffset,mvp);
-//    m_Shader->setUniform(Uniform::uTexture,1);
-//    m_Texture->bind(1);
-//    m_Shader->bindShaders();
-//    m_VertexBuffer->bind();
-//    glDrawElements(GL_TRIANGLES,36,GL_UNSIGNED_INT,0);
-
 
     auto *wvp= m_RenderQueue.create_uniform(nullptr,Uniform::uOffset,mvp);
     auto *text = m_RenderQueue.create_texture(nullptr,m_Texture.get(),Uniform::uTexture);

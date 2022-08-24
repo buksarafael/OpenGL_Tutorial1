@@ -39,6 +39,7 @@ add_executable(
 	include/Math3D.h
 	include/ogldev_types.h
 	include/ogldev_util.h
+	include/PerlinNoise.h
 	include/Pipeline.h
 	include/Pool.h
 	include/RenderingQueue.h
