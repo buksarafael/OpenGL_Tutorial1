@@ -5,7 +5,7 @@
 
 struct IUniformNode{
     IUniformNode *next = nullptr;
-    Uniform uniform;
+    UniformHelper::UniformType uniform;
     virtual void set_uniform(ShadersProgram *sp)=0;
 };
 

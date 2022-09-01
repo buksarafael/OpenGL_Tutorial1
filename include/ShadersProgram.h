@@ -49,13 +49,13 @@ public:
 public:
 	bool create(const std::array<const char *, 2> &files);
 	bool create(const char *vs,const char *fs);
-	GLint getUniformPosition(Uniform uniform);
-	void setUniform(Uniform,int value);
-	void setUniform(Uniform,float value);
-	void setUniform(Uniform,Vector2f& vec2f);
-	void setUniform(Uniform,Vector3f& vec3f);
-	void setUniform(Uniform,Vector4f& vec4f);
-	void setUniform(Uniform,Matrix4f& mat4f);
+	GLint getUniformPosition(UniformHelper::UniformType uniform);
+	void setUniform(UniformHelper::UniformType,int value);
+	void setUniform(UniformHelper::UniformType,float value);
+	void setUniform(UniformHelper::UniformType,Vector2f& vec2f);
+	void setUniform(UniformHelper::UniformType,Vector3f& vec3f);
+	void setUniform(UniformHelper::UniformType,Vector4f& vec4f);
+	void setUniform(UniformHelper::UniformType,Matrix4f& mat4f);
 	void bindShaders();
 	void initUniforms();
 
@@ -74,7 +74,7 @@ public:
 	GLuint m_ShaderProgram=0;
 
 private:
-	std::array<GLuint,(std::size_t)Uniform::Count>m_Uniforms;
+	std::array<GLuint,(std::size_t)UniformHelper::UniformType::kUniformCount>m_Uniforms;
 	BlendingState m_BlendingState;
 
 };

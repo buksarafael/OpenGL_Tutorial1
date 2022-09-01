@@ -19,9 +19,9 @@ class RenderingQueue {
     static void draw_ibo(GLenum topology, std::size_t primitive_start,std::size_t primitive_end);
     public:
     RenderingQueue()=default;
-    IUniformNode *create_uniform(IUniformNode *prev,Uniform type, int value);
-    IUniformNode *create_uniform(IUniformNode *prev,Uniform type, const Matrix4f &value);
-    TextureNode *create_texture(TextureNode *prv,Texture *value,Uniform type);
+    IUniformNode *create_uniform(IUniformNode *prev,UniformHelper::UniformType type, int value);
+    IUniformNode *create_uniform(IUniformNode *prev,UniformHelper::UniformType type, const Matrix4f &value);
+    TextureNode *create_texture(TextureNode *prv,Texture *value,UniformHelper::UniformType type);
     void push_rendering_packet(const RenderPacket &rp);
     void draw_all();
     void clear();

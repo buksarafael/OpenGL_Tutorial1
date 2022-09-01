@@ -2,18 +2,19 @@
 #include <array>
 #include <iostream>
 
-struct UniformData;
-enum Uniform{
-    uOffset=0,
-    uModel,
-    uView,
-    uProjection,
-    uMVP,
-    uTexture,
-
-    Count
-};
 struct UniformHelper{
-    public:
-        static const char* getName(Uniform);
+enum UniformType{
+    kOffset=0,
+    kMVP,
+    kTexture0,
+    kTexture1,
+    kTexture2,
+    kTexture3,
+    kTexture4,
+    kSplatMapTexture,
+
+    kUniformCount
+};
+    static const char* getUniformName(const UniformType u);
+    static UniformType getUniformType(const char *uniform_name);
 };

@@ -66,9 +66,9 @@ void addShader(GLuint ShaderProgram,const char* pShaderText,GLenum ShaderType){
 }
 
 void ShadersProgram::initUniforms(){
-    auto count=(std::size_t)Uniform::Count;
+    auto count=(std::size_t)UniformHelper::UniformType::kUniformCount;
     for(std::size_t i =0;i<count;i++){
-        const char* name=UniformHelper::getName((Uniform)i);
+        const char* name=UniformHelper::getUniformName((UniformHelper::UniformType)i);
         int pos=glGetUniformLocation(m_ShaderProgram,name);
         if(pos==-1){
             m_Uniforms[i]=-1;
@@ -78,28 +78,29 @@ void ShadersProgram::initUniforms(){
     }
 }
 
-GLint ShadersProgram::getUniformPosition(Uniform uniform){
-    const char* name=UniformHelper::getName(uniform);
-    return glGetUniformLocation(m_ShaderProgram,name);
+GLint ShadersProgram::getUniformPosition(UniformHelper::UniformType uniform){
+    const char* name=UniformHelper::getUniformName(uniform);
+    auto xd = glGetUniformLocation(m_ShaderProgram,name);
+    return xd;
 }
 
-void ShadersProgram::setUniform(Uniform uniform,int value){
-    glUniform1i((std::size_t)uniform,value);
+void ShadersProgram::setUniform(UniformHelper::UniformType uniform,int value){
+    glUniform1i(getUniformPosition(uniform),value);
 }
-void ShadersProgram::setUniform(Uniform uniform,float value){
-    glUniform1f((std::size_t)uniform,value);
+void ShadersProgram::setUniform(UniformHelper::UniformType uniform,float value){
+    glUniform1f(getUniformPosition(uniform),value);
 }
-void ShadersProgram::setUniform(Uniform uniform,Vector2f& vec2f){
-    glUniform2f((std::size_t)uniform,vec2f.x,vec2f.y); 
+void ShadersProgram::setUniform(UniformHelper::UniformType uniform,Vector2f& vec2f){
+    glUniform2f(getUniformPosition(uniform),vec2f.x,vec2f.y); 
 }
-void ShadersProgram::setUniform(Uniform uniform,Vector3f& vec3f){
-    glUniform3f((std::size_t)uniform,vec3f.x,vec3f.y,vec3f.z);
+void ShadersProgram::setUniform(UniformHelper::UniformType uniform,Vector3f& vec3f){
+    glUniform3f(getUniformPosition(uniform),vec3f.x,vec3f.y,vec3f.z);
 }
-void ShadersProgram::setUniform(Uniform uniform,Vector4f& vec4f){
-    glUniform4f((std::size_t)uniform,vec4f.x,vec4f.y,vec4f.z,vec4f.w);
+void ShadersProgram::setUniform(UniformHelper::UniformType uniform,Vector4f& vec4f){
+    glUniform4f(getUniformPosition(uniform),vec4f.x,vec4f.y,vec4f.z,vec4f.w);
 }
-void ShadersProgram::setUniform(Uniform uniform,Matrix4f& mat4f){
-    glUniformMatrix4fv(uniform,1,GL_TRUE,&mat4f.m[0][0]);
+void ShadersProgram::setUniform(UniformHelper::UniformType uniform,Matrix4f& mat4f){
+    glUniformMatrix4fv(getUniformPosition(uniform),1,GL_TRUE,&mat4f.m[0][0]);
 }
 bool ShadersProgram::create(const char *vs,const char *fs){
     std::array<const char*,2> files={vs,fs};

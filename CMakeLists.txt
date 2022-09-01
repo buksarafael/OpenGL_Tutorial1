@@ -16,6 +16,7 @@ add_executable(
 	src/AttributeHelper.cpp
 	src/Camera.cpp
 	src/Engine.cpp
+	src/HeightMap.cpp
 	src/IndexBuffer.cpp
 	src/main.cpp
 	src/Math3D.cpp
@@ -24,6 +25,8 @@ add_executable(
 	src/RenderPacket.cpp
 	src/ResourceManager.cpp
 	src/ShadersProgram.cpp
+	src/StbHelper.cpp
+	src/Terrain.cpp
 	src/Texture.cpp
 	src/UniformHelper.cpp
 	src/UniformList.cpp
@@ -35,6 +38,7 @@ add_executable(
 	include/AttributeHelper.h
 	include/Camera.h
 	include/Engine.h
+	include/HeightMap
 	include/Indexbuffer.h
 	include/Math3D.h
 	include/ogldev_types.h
@@ -47,6 +51,8 @@ add_executable(
 	include/ResourceManager.h
 	include/ShadersProgram.h
 	include/stb_image.h
+	include/StbHelper.h
+	include/Terrain.h
 	include/Texture.h
 	include/UniformHelper.h
 	include/UniformList.h

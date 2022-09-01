@@ -1,118 +1,107 @@
 #include <Engine.h>
 #include <RenderPacket.h>
-#include <PerlinNoise.h>
-bool Engine::initialize(const char* window_name,int width,int height){
+
+bool Engine::initialize(const char* window_name,std::size_t width,std::size_t height){
     if(!initWindow(window_name,width,height)){
         std::cout<<"Failed to initialize window!"<<std::endl;
+        return false;
     }
-
-
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_ALWAYS);
-
-    glEnable(GL_CULL_FACE);
-    glFrontFace(GL_CW);
-    glCullFace(GL_BACK);
-
-    initBuffer();
-    initShaders();
+    
     initCamera();
     initModel();
-    initTexture();
+    initTerrain();
+
+    m_Mouse.x=0.0f;
+    m_Mouse.y=0.0f;
 
     return true;
 }
 
 void Engine::render(){
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
     glClearDepth(1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0.2f,0.3f,0.3f,1.0f);
+    
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+    
     glfwGetFramebufferSize(m_Window,&m_Width,&m_Height);
     glViewport(0,0,m_Width,m_Height);
-    m_Camera.UpdatePerspective(m_Width, m_Height);
-    auto mvp=m_Camera.getProjectionMatrix()*m_Camera.getViewMatrix()*m_Model.GetTrans();
-
-    auto *wvp= m_RenderQueue.create_uniform(nullptr,Uniform::uOffset,mvp);
-    auto *text = m_RenderQueue.create_texture(nullptr,m_Texture.get(),Uniform::uTexture);
-
-    RenderPacket packet;
-    packet.vbuff = m_VertexBuffer.get();
-    packet.ibuff = m_IndexBuffer.get();
-    packet.shader = m_Shader.get();
-    packet.topology = GL_TRIANGLES;
-    packet.primitive_start = 0;
-    packet.primitive_end = m_IndexBuffer->getSize()/4;
-    packet.first_texture = text;
-    packet.first_uniform = wvp;
-
-    m_RenderQueue.push_rendering_packet(packet);
+    
+    
+    
+    m_Camera.setProjection(m_Width,m_Height);
+    m_Camera.updateCamera();
+    
+    m_Terrain->createRenderPackets(m_RenderQueue,m_Camera);
     m_RenderQueue.draw_all();
     m_RenderQueue.clear();
+
+    GLenum err;
+    while((err = glGetError()) != GL_NO_ERROR)
+    {
+        std::cout<<err<<std::endl;
+    }
+    //std::cout<<"end of log"<<std::endl;
 }
 
-void Engine::initBuffer(){
-    m_VertexLayout=std::make_shared<VertexLayout>();
-    m_VertexBuffer=std::make_shared<VertexBuffer>();
-    m_IndexBuffer=std::make_shared<IndexBuffer>();
+void Engine::update(const InputState &input_state, const float delta_seconds){
+    if(input_state.mouse_moved){
+        const float yaw_diff=input_state.mouse_delta.x;
+        const float pitch_diff = input_state.mouse_delta.y;
 
-    m_VertexLayout->AddVertexAttribute(AttributeHelper::kPosition, 3);
-    m_VertexLayout->AddVertexAttribute(AttributeHelper::kUV, 2);
-
-    float vertex_data[] = {0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 
-                           -0.5f, 0.5f,-0.5f, 0.0f, 1.0f,
-                           -0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-                            0.5f,-0.5f,-0.5f, 1.0f, 1.0f,
-                           -0.5f,-0.5f,-0.5f, 0.0f, 0.0f,
-                            0.5f, 0.5f,-0.5f, 1.0f, 0.0f,
-                            0.5f,-0.5f, 0.5f, 0.0f, 1.0f,  
-                           -0.5f,-0.5f, 0.5f, 1.0f, 1.0f
-        
-    };
-    m_VertexBuffer->create(vertex_data,*m_VertexLayout,sizeof(vertex_data)/m_VertexLayout->size());
-    m_VertexBuffer->bind();
-    unsigned int index_data[]={0, 1, 2,
-                               1, 3, 4,
-                               5, 6, 3,
-                               7, 3, 6,
-                               2, 4, 7,
-                               0, 7, 6,
-                               0, 5, 1, 
-                               1, 5, 3, 
-                               5, 0, 6, 
-                               7, 4, 3,
-                               2, 1, 4, 
-                               0, 2, 7
-                              };
-
-    m_IndexBuffer->create(*m_VertexBuffer,index_data,sizeof(index_data));
-    m_IndexBuffer->bind();
+        m_Camera.onYaw(yaw_diff * delta_seconds);
+        m_Camera.onPitch(pitch_diff * delta_seconds);
+    }
+    float speed=1.0f;
+    if(m_InputState.keys_pressed[GLFW_KEY_LEFT_SHIFT]){
+        speed=5.0f;
+    }
+    if (m_InputState.keys_pressed[GLFW_KEY_W]) {
+        m_Camera.moveForward(-delta_seconds*speed);
+    }
+    if (m_InputState.keys_pressed[GLFW_KEY_S]) {
+        m_Camera.moveForward(delta_seconds*speed);
+    }
+    if (m_InputState.keys_pressed[GLFW_KEY_A]) {
+        m_Camera.moveSide(-delta_seconds*speed);
+    }
+    if (m_InputState.keys_pressed[GLFW_KEY_D]) {
+        m_Camera.moveSide(delta_seconds*speed);
+    }
+    if (m_InputState.keys_pressed[GLFW_KEY_Q]) {
+        m_Camera.moveUp(delta_seconds*speed*2.0f);
+    }
+    if (m_InputState.keys_pressed[GLFW_KEY_E]) {
+        m_Camera.moveUp(-delta_seconds*speed*2.0f);
+    }
+    if(m_InputState.keys_pressed[GLFW_KEY_G]){
+        initTerrain();
+    }
 }
 
-void Engine::initShaders(){
-    m_Shader=getResourceManager().createShader("shader");
-}
-void Engine::initTexture(){
-    m_Texture = getResourceManager().getTexture("bricks.jpeg");
-    m_Texture->load();
-    m_Texture->bind(0);
+void Engine::initTerrain(){
+    m_HeightMap = getResourceManager().getHeightMap("heightmap.tga");
+
+    m_Terrain = std::make_shared<Terrain>();
+    m_Terrain->initResources(&getResourceManager());
+    m_Terrain->loadHeightMap(m_HeightMap);
+    m_Terrain->generate();
 }
 
 void Engine::initCamera(){
     m_Camera.setProjection(m_Width,m_Height);
-    m_Camera.LookAt(Vector3f(0.0f,0.0f,4.0f), m_Camera.getPosition());
+    //_Camera.LookAt(0.0f,0.0f,0.0f);
 }
 
 void Engine::initModel(){
     m_Model.SetWorldPos(0.0f,0.0f,4.0f);
 }
-void Engine::window_callback(Application *App,int Width,int Height){
-    Engine *handler = reinterpret_cast<Engine *>(App);
-    handler->m_Camera.setProjection(Width,Height);
+void Engine::window_callback(int Width,int Height){
+    Application::window_callback(Width,Height);
+    this->m_Camera.setProjection((float)Width,(float)Height);
 }
-void Engine::key_callback(Application *App, int key){
-    Engine *handler = reinterpret_cast<Engine *>(App);
-    handler->m_Camera.Move(handler->m_Camera.OnKeyboard(key,handler->m_Camera.getPosition(),handler->m_Camera.getTarget()));
-}
-ResourceManager &Engine::getResourceManager(){
-    return m_ResourceManager;
+void Engine::before_run(InputState &input_state){
+    capture_mouse();
 }

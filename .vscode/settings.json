@@ -70,6 +70,10 @@
         "algorithm": "cpp",
         "functional": "cpp",
         "iterator": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "__tree": "cpp",
+        "numeric": "cpp",
+        "random": "cpp",
+        "set": "cpp"
     }
 }

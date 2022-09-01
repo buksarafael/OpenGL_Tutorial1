@@ -1,30 +1,57 @@
 #include <UniformHelper.h>
-struct UniformData{
-    UniformData();
-    std::array<std::pair<const char*,Uniform>,(std::size_t)Uniform::Count> uniforms;
-};
-
-UniformData::UniformData(){
-    uniforms = std::array<std::pair<const char*,Uniform>, (std::size_t)Uniform::Count>
-    {
-        std::pair<const char*,Uniform>{"Offset",Uniform::uOffset},
-        std::pair<const char*,Uniform>{"Model",Uniform::uModel},
-        std::pair<const char*,Uniform>{"View",Uniform::uView},
-        std::pair<const char*,Uniform>{"Projection",Uniform::uProjection},
-        std::pair<const char*,Uniform>{"MVP",Uniform::uMVP},
-        std::pair<const char*,Uniform>{"Texture",Uniform::uTexture}
-    };
+#include <iostream>
+const char *UniformHelper::getUniformName(const UniformType t) {
+  switch (t) {
+  case UniformHelper::UniformType::kOffset:
+    return "Offset";
+    break;
+  case UniformHelper::UniformType::kMVP:
+    return "MVP";
+    break;
+  case UniformHelper::UniformType::kTexture0:
+    return "Texture0";
+    break;
+  case UniformHelper::UniformType::kTexture1:
+    return "Texture1";
+    break;
+  case UniformHelper::UniformType::kTexture2:
+    return "Texture2";
+    break;
+  case UniformHelper::UniformType::kTexture3:
+    return "Texture3";
+    break;
+  case UniformHelper::UniformType::kTexture4:
+    return "Texture4";
+    break;
+  case UniformHelper::UniformType::kSplatMapTexture:
+    return "SplatMapTexture";
+    break;
+  case UniformHelper::UniformType::kUniformCount:
+    return "UniformCount";
+    break;
+  default:
+    break;
+    return nullptr;
+  }
 }
 
-UniformData& getUniforms(){
-    static UniformData data;
-    return data;
-}
-
-const char* UniformHelper::getName(Uniform uniform){
-    for(const auto& pair : getUniforms().uniforms){
-        if(pair.second==uniform){
-            return pair.first;
-        }
-    }
+UniformHelper::UniformType
+UniformHelper::getUniformType(const char *uniform_name) {
+  if (strcmp(uniform_name, "Offset") == 0)
+    return UniformHelper::UniformType::kOffset;
+  if (strcmp(uniform_name, "MVP") == 0)
+    return UniformHelper::UniformType::kMVP;
+  if (strcmp(uniform_name, "Texture0") == 0)
+    return UniformHelper::UniformType::kTexture0;
+  if (strcmp(uniform_name, "Texture1") == 0)
+    return UniformHelper::UniformType::kTexture1;
+  if (strcmp(uniform_name, "Texture2") == 0)
+    return UniformHelper::UniformType::kTexture2;
+  if (strcmp(uniform_name, "Texture3") == 0)
+    return UniformHelper::UniformType::kTexture3;
+  if (strcmp(uniform_name, "Texture4") == 0)
+    return UniformHelper::UniformType::kTexture4;
+  if (strcmp(uniform_name, "SplatMapTexture") == 0)
+    return UniformHelper::UniformType::kSplatMapTexture;
+  return UniformHelper::UniformType::kUniformCount;
 }

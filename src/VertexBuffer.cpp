@@ -17,8 +17,9 @@ void VertexBuffer::create(const void* data, const VertexLayout& vertex_layout, c
     glBufferData(GL_ARRAY_BUFFER,vertex_layout.size()*vertex_count,(void *)data,GL_STATIC_DRAW);
     std::size_t offset = 0;
     for(VertexAttribute v: vertex_layout.get_attributes()){
-        glEnableVertexAttribArray(AttributeHelper::getAttributeType(v.type));
-        glVertexAttribPointer(AttributeHelper::getAttributeType(v.type),v.number_of_floats,GL_FLOAT,GL_FALSE,vertex_layout.size(),(void *)offset);
+        auto at=AttributeHelper::getAttributeType(v.type);
+        glEnableVertexAttribArray(at);
+        glVertexAttribPointer(at,v.number_of_floats,GL_FLOAT,GL_FALSE,vertex_layout.size(),(void *)offset);
         offset +=v.number_of_floats*sizeof(float);
     }
     glBindVertexArray(0);

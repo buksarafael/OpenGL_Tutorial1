@@ -15,8 +15,11 @@ const char *AttributeHelper::getAttributeName(const AttributeType t){
         case AttributeHelper::AttributeType::kAttributeCount:
             return "AttributeCount";
             break;
+        case AttributeHelper::AttributeType::kNormal:
+            return "Normal";
+            break;
         default:
-            return "Error";
+            return nullptr;
     }
 }
 AttributeHelper::AttributeType
@@ -27,6 +30,7 @@ AttributeHelper::getAttributeType(const char *attribute_name){
         return AttributeHelper::AttributeType::kPosition;
     if(strcmp(attribute_name,"UV")==0)
         return AttributeHelper::AttributeType::kUV;
-    
+    if(strcmp(attribute_name,"Normal")==0)
+        return AttributeHelper::AttributeType::kNormal;
     return AttributeHelper::AttributeType::kAttributeCount;
 }

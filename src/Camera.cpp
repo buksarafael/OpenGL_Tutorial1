@@ -1,29 +1,60 @@
 #include <Camera.h>
 Camera::Camera(){
-    m_position = Vector3f(2.0f,2.0f,2.0f);
+    // m_position = Vector3f(2.0f,2.0f,2.0f);
     m_target   = Vector3f(0.0f,0.0f,0.0f);
-    m_up       = Vector3f(0.0f,1.0f,0.0f);
+    m_up       = Vector3f(0.0f,0.0f,1.0f);
+    m_pitch = 0.0f;
+    m_yaw=0.0f;
 }
 void Camera::SetPosition(float x,float y,float z){
-    m_position.x=x;
-    m_position.y=y;
-    m_position.z=z;
+    // m_position.x=x;
+    // m_position.y=y;
+    // m_position.z=z;
 }
 void Camera::SetPosition(Vector3f pos){
-    m_position.x=pos.x;
-    m_position.y=pos.y;
-    m_position.z=pos.z;
+    // m_position.x=pos.x;
+    // m_position.y=pos.y;
+    // m_position.z=pos.z;
+}
+void Camera::LookAt(float x, float y, float z){
+    m_target.x=x;
+    m_target.y=y;
+    m_target.z=z;
 }
 void Camera::LookAt(const Vector3f &Target,const Vector3f &Pos){
-    m_position=Pos;
+    //m_position=Pos;
     m_target=Target;
 }
 void Camera::Move(Vector3f distance){
-    m_position+=distance;
+    //m_position+=distance;
 }
-Matrix4f Camera::getViewMatrix(){
-    m_ViewMatrix.InitCameraTransform(m_position,m_target,m_up);
-    return m_ViewMatrix;
+void Camera::onYaw(float rad){
+    m_yaw+=rad;
+}
+void Camera::onPitch(float rad){
+    m_pitch+=rad;
+}
+void Camera::moveUp(const double speed){
+    m_target.z += 100.0f * speed;
+}
+void Camera::moveSide(const double speed){
+    Vector3f dir{0.0f,1.0f,0.0f};
+    dir.Rotate(m_yaw,{0.0f,0.0f,1.0f});
+    m_target+=(dir*speed)*1000.0f;
+}
+void Camera::moveForward(const double speed){
+    Vector3f dir{1.0f,0.0f,0.0f};
+    dir.Rotate(m_pitch,{0.0f,1.0f,0.0f});
+    dir.Rotate(m_yaw,{0.0f,0.0f,1.0f});
+    dir.z=0;
+    dir.Normalize();
+    m_target+=dir * speed * 1000.0f;
+}
+void Camera::updateCamera(){
+    Vector3f dir{1.0f,0.0f,0.0f};
+    dir.Rotate(-m_pitch,{0.0f,1.0f,0.0f});
+    dir.Rotate(m_yaw,{0.0f,0.0f,1.0f});
+    m_ViewMatrix.InitCameraTransform(m_target+dir*m_Distance,m_target,m_up);
 }
 void Camera::setProjection(PersProjInfo &p){
     m_perspective.FOV=p.FOV;
@@ -42,56 +73,19 @@ void Camera::setProjection(float width,float height){
     p.zNear=m_zNear;
     setProjection(p);
 }
-Matrix4f Camera::getProjectionMatrix(){
+const Matrix4f Camera::getViewMatrix() const{
+    return m_ViewMatrix;
+}
+const float Camera::getYaw() const{
+    return m_yaw;
+}
+const Matrix4f Camera::getProjectionMatrix() const{
     return m_ProjectionMatrix;
 }
-Vector3f Camera::getPosition(){
-    return m_position;
-}
-Vector3f Camera::getTarget(){
+
+const Vector3f Camera::getTarget() const{
     return m_target;
 }
 void Camera::UpdatePerspective(int width,int height){
-//    m_perspective.Width=width;
-//    m_perspective.Height=height;
     setProjection(width, height);
-}
-Vector3f Camera::OnKeyboard(int key,Vector3f camera_pos,Vector3f camera_target){
-    Vector3f distance = Vector3f(0.0f,0.0f,0.0f);
-    Vector3f toTarget=camera_target-camera_pos;
-    //toTarget.z=0.0f;
-    toTarget.Normalize();
-    switch(key){
-        case GLFW_KEY_UP:{
-            distance+=toTarget;
-            break;
-        }
-        case GLFW_KEY_DOWN:{
-            distance-=toTarget;
-        }
-            break;
-        case GLFW_KEY_LEFT:{
-            Vector3f Left=toTarget.Cross(Vector3f(0.0f,1.0f,0.0f));
-            Left.Normalize();
-            //Left*=m_speed;
-            distance+=Left;
-        }
-            break;
-        case GLFW_KEY_RIGHT:{
-            Vector3f Right=Vector3f(0.0f,1.0f,0.0f).Cross(toTarget);
-            Right.Normalize();
-            //Right*=m_speed;
-            distance+=Right;
-        }
-            break;
-        case GLFW_KEY_PAGE_UP:
-            distance=Vector3f(0.0f,1.0f,0.0f);
-            break;
-        case GLFW_KEY_PAGE_DOWN:
-            distance=Vector3f(0.0f,-1.0f,0.0f);
-            break;
-    }
-    std::cout<<"Target("<<m_target.x<<","<<m_target.y<<","<<m_target.z<<")"<<std::endl;
-    std::cout<<"Position("<<m_position.x<<","<<m_position.y<<","<<m_position.z<<")"<<std::endl<<std::endl;
-    return distance;
 }

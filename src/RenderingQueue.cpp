@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <vector>
 
-IUniformNode *RenderingQueue::create_uniform(IUniformNode *prev, Uniform type,int value){
+IUniformNode *RenderingQueue::create_uniform(IUniformNode *prev, UniformHelper::UniformType type,int value){
     auto *n = m_IntUniformPool.alloc();
     n->uniform = type;
     n->value = value;
@@ -14,7 +14,7 @@ IUniformNode *RenderingQueue::create_uniform(IUniformNode *prev, Uniform type,in
     return n;
 }
 
-IUniformNode *RenderingQueue::create_uniform(IUniformNode *prev,Uniform type,const Matrix4f &value){
+IUniformNode *RenderingQueue::create_uniform(IUniformNode *prev,UniformHelper::UniformType type,const Matrix4f &value){
     auto *n = m_Mat4UniformPool.alloc();
     n->uniform = type;
     n->value = value;
@@ -22,7 +22,7 @@ IUniformNode *RenderingQueue::create_uniform(IUniformNode *prev,Uniform type,con
     return n;
 }
 
-TextureNode *RenderingQueue::create_texture(TextureNode *prev,Texture *value, Uniform type){
+TextureNode *RenderingQueue::create_texture(TextureNode *prev,Texture *value, UniformHelper::UniformType type){
     auto *n = m_TexturePool.alloc();
     n->value=value;
     n->target=type;
